@@ -1,0 +1,100 @@
+"use client";
+
+import React, { useEffect, useState } from "react";
+import { Brain, Loader2 } from "lucide-react";
+
+export default function DashboardPage() {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Simulate loading for 2 seconds
+    const timer = setTimeout(() => setLoading(false), 2000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (loading) {
+    return (
+      <main className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-indigo-50 to-blue-100 dark:from-gray-900 dark:to-gray-800">
+        <div
+          data-slot="skeleton"
+          className="flex flex-col items-center justify-center space-y-4"
+        >
+          <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full flex items-center justify-center animate-pulse shadow-lg">
+            <Brain className="w-8 h-8 text-white" />
+          </div>
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+            Loading Dashboard
+          </h2>
+          <p className="text-gray-600 dark:text-gray-300">
+            Preparing your learning analytics...
+          </p>
+          <Loader2 className="w-6 h-6 animate-spin text-indigo-500 mt-2" />
+        </div>
+      </main>
+    );
+  }
+
+  return (
+    <main className="min-h-screen bg-background text-foreground p-8">
+      {/* Header */}
+      <header className="flex items-center justify-between mb-8">
+        <h1 className="text-3xl font-bold bg-gradient-to-r from-sky-500 to-emerald-500 text-transparent bg-clip-text">
+          Welcome to Your Flashcards Dashboard
+        </h1>
+        <span className="text-sm text-muted-foreground">
+          EduQuestify • Adaptive Learning
+        </span>
+      </header>
+
+      {/* Main dashboard content */}
+      <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <DashboardCard
+          title="Total Flashcards"
+          value="128"
+          subtitle="Across all subjects"
+        />
+        <DashboardCard
+          title="Study Sessions"
+          value="34"
+          subtitle="This month"
+        />
+        <DashboardCard
+          title="Average Accuracy"
+          value="86%"
+          subtitle="Keep improving!"
+        />
+        <DashboardCard
+          title="Subjects Covered"
+          value="6"
+          subtitle="Active learning paths"
+        />
+        <DashboardCard
+          title="Leaderboard Rank"
+          value="#12"
+          subtitle="Among 250 peers"
+        />
+        <DashboardCard
+          title="Next Goal"
+          value="Reach 90% accuracy"
+          subtitle="Keep going strong!"
+        />
+      </section>
+
+      {/* Footer */}
+      <footer className="mt-16 border-t border-border pt-8 text-center text-sm text-muted-foreground">
+        © 2025 EduQuestify — AI-Powered Learning for Everyone
+      </footer>
+    </main>
+  );
+}
+
+/** Dashboard Card Component */
+function DashboardCard({ title, value, subtitle }) {
+  return (
+    <div className="bg-card border border-border rounded-2xl p-6 shadow-sm hover:shadow-md transition-all duration-200">
+      <h3 className="text-lg font-semibold mb-2">{title}</h3>
+      <p className="text-3xl font-bold text-sky-500 mb-1">{value}</p>
+      <p className="text-muted-foreground text-sm">{subtitle}</p>
+    </div>
+  );
+}

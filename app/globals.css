@@ -1,0 +1,354 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ===== Study + Gamified Theme Tokens ===== */
+:root {
+  /* ===== Base Colors ===== */
+  /* Neutral Colors */
+  --color-background: 255 255 255;   /* white */
+  --color-foreground: 15 23 42;      /* slate-900 */
+  
+  /* Primary Color */
+  --color-primary: 37 99 235;        /* blue-600 - Better contrast in light mode */
+  
+  /* Accent Colors */
+  --color-accent-success: 16 185 129;  /* emerald-500 */
+  --color-accent-warning: 245 158 11;  /* amber-500 */
+  --color-accent-error: 220 38 38;     /* red-600 - Better contrast */
+  --color-accent-reward: 217 119 6;    /* amber-600 - Better contrast */
+  
+  /* Semantic Colors */
+  --color-border: 226 232 240;      /* slate-200 */
+  --color-input: 226 232 240;       /* slate-200 */
+  --color-ring: 37 99 235;          /* blue-600 */
+  --color-card: 255 255 255;        /* white */
+  --color-card-foreground: 15 23 42; /* slate-900 */
+  
+  /* Typography */
+  --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  
+  /* Border Radius */
+  --radius: 0.625rem;  /* 10px */
+  
+  /* Spacing */
+  --header-height: 4rem;
+  --container-padding: 1rem;
+}
+
+/* ===== Dark Theme Overrides ===== */
+.dark {
+  --color-background: 9 14 22;       /* slate-950 */
+  --color-foreground: 248 250 252;   /* slate-50 - Brighter text for better contrast */
+  --color-primary: 96 165 250;       /* blue-400 - Brighter for dark mode */
+  --color-border: 30 41 59;          /* slate-800 */
+  --color-input: 30 41 59;           /* slate-800 */
+  --color-ring: 96 165 250;          /* blue-400 */
+  --color-card: 15 23 42;            /* slate-900 */
+  --color-card-foreground: 248 250 252; /* slate-50 */
+  --color-accent-success: 52 211 153; /* emerald-400 */
+  --color-accent-warning: 251 191 36; /* amber-400 */
+  --color-accent-error: 248 113 113;  /* red-400 - Softer in dark mode */
+  --color-accent-reward: 251 191 36;  /* amber-400 */
+}
+
+/* ===== CSS Variables for Tailwind ===== */
+@layer base {
+  /* Base Colors */
+  --background: rgb(var(--color-background));
+  --foreground: rgb(var(--color-foreground));
+  
+  /* Primary Colors */
+  --primary: rgb(var(--color-primary));
+  --primary-foreground: rgb(255 255 255);
+  
+  /* Secondary Colors */
+  --secondary: color-mix(in oklab, var(--background), black 6%);
+  --secondary-foreground: var(--foreground);
+  
+  /* Muted Colors */
+  --muted: color-mix(in oklab, var(--background), black 6%);
+  --muted-foreground: color-mix(in oklab, var(--foreground), white 45%);
+  
+  /* Accent Colors */
+  --accent: rgb(var(--color-accent-success));
+  --accent-foreground: rgb(255 255 255);
+  
+  /* Destructive Colors */
+  --destructive: rgb(var(--color-accent-error));
+  --destructive-foreground: rgb(255 255 255);
+  
+  /* UI Elements */
+  --border: rgb(var(--color-border));
+  --input: rgb(var(--color-input));
+  --ring: rgb(var(--color-ring));
+  
+  /* Card */
+  --card: rgb(var(--color-card, var(--color-background)));
+  --card-foreground: rgb(var(--color-card-foreground, var(--color-foreground)));
+  
+  /* Border Radius */
+  --radius: var(--radius);
+  
+  /* Base Styles */
+  * {
+    @apply border-border;
+  }
+  
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+  }
+}
+
+/* ===== Component Styles ===== */
+@layer components {
+  /* Button Styles */
+  .btn {
+    @apply inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors
+           focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring
+           disabled:opacity-50 disabled:pointer-events-none;
+  }
+  
+  .btn-primary {
+    @apply bg-primary text-primary-foreground hover:opacity-90;
+  }
+  
+  .btn-secondary {
+    @apply bg-secondary text-secondary-foreground hover:bg-secondary/80;
+  }
+  
+  .btn-outline {
+    @apply border border-input hover:bg-accent hover:text-accent-foreground;
+  }
+  
+  /* Badge Styles */
+  .badge {
+    @apply inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-xs font-semibold
+           transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2;
+  }
+  
+  .badge--primary {
+    @apply bg-primary/10 text-primary;
+  }
+  
+  .badge--success {
+    @apply bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400;
+  }
+  
+  .badge--warning {
+    @apply bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400;
+  }
+  
+  .badge--error {
+    @apply bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400;
+  }
+  
+  .badge--coin {
+    @apply bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400;
+  }
+  
+  /* Progress Bar */
+  .progress-track {
+    @apply h-2 w-full overflow-hidden rounded-full bg-muted;
+  }
+  
+  .progress-fill {
+    @apply h-full rounded-full bg-primary transition-[width] duration-300;
+  }
+  
+  /* Card */
+  .card {
+    @apply rounded-lg border bg-card text-card-foreground shadow-sm;
+  }
+  
+  .card-header {
+    @apply flex flex-col space-y-1.5 p-6;
+  }
+  
+  .card-title {
+    @apply text-2xl font-semibold leading-none tracking-tight;
+  }
+  
+  .card-description {
+    @apply text-sm text-muted-foreground;
+  }
+  
+  .card-content {
+    @apply p-6 pt-0;
+  }
+  
+  .card-footer {
+    @apply flex items-center p-6 pt-0;
+  }
+  
+  /* Hero Section */
+  .hero {
+    @apply rounded-lg border bg-gradient-to-b from-muted/50 to-muted/30 p-8 text-center;
+  }
+  
+  /* Container */
+  .container {
+    @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
+  }
+  
+  /* Section */
+  .section {
+    @apply py-12 md:py-24;
+  }
+  
+  /* Input */
+  .input {
+    @apply flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm
+           ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium
+           placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2
+           focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50;
+  }
+  
+  /* Label */
+  .label {
+    @apply text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70;
+  }
+}
+
+/* ===== Animation Keyframes ===== */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* ===== Utility Classes ===== */
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.3s ease-out forwards;
+}
+
+/* Print Styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  
+  body {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}
+
+/* ===== Additional Components ===== */
+@layer components {
+  .card {
+    @apply rounded-lg border bg-card text-card-foreground shadow-sm;
+    /* Slightly darker than base to pop on light or dark */
+    background: color-mix(in oklab, var(--background), black 10%);
+  }
+
+  .link {
+    @apply text-primary underline-offset-4 hover:underline;
+  }
+}
+.link:hover {
+  text-decoration: underline;
+}
+
+hr.token-sep {
+  border: 0;
+  height: 1px;
+  background: var(--border);
+}
+
+/* Study/gamified background utilities from your CSS brief, implemented with semantic tokens */
+
+/* 1) Quest Map background: subtle parchment + faint nodes + pulsing paths */
+.bg-quest-map {
+  position: relative;
+  background: radial-gradient(
+      100% 100% at 50% 50%,
+      color-mix(in oklab, var(--background), #bfa 2%),
+      color-mix(in oklab, var(--background), black 4%)
+    )
+    fixed;
+}
+.bg-quest-map::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.25;
+  background-image: radial-gradient(
+      circle at 10% 20%,
+      color-mix(in oklab, var(--foreground), white 92%) 2px,
+      transparent 2px
+    ), radial-gradient(circle at 30% 70%, color-mix(in oklab, var(--foreground), white 92%) 2px, transparent 2px),
+    radial-gradient(circle at 70% 40%, color-mix(in oklab, var(--foreground), white 92%) 2px, transparent 2px),
+    radial-gradient(circle at 85% 80%, color-mix(in oklab, var(--foreground), white 92%) 2px, transparent 2px);
+  background-size: 220px 220px, 260px 260px, 300px 300px, 280px 280px;
+  background-repeat: repeat;
+}
+.bg-quest-map::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent, color-mix(in oklab, var(--primary), white 65%), transparent);
+  background-size: 40% 2px;
+  mix-blend-mode: overlay;
+  animation: quest-path 8s linear infinite;
+  opacity: 0.25;
+}
+@keyframes quest-path {
+  0% {
+    background-position: 0% 20%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 80%;
+  }
+}
+
+/* 2) XP bar background: subtle top bar fill loop */
+.bg-xp-bar {
+  position: relative;
+}
+.bg-xp-bar::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 6px;
+  background: color-mix(in oklab, var(--accent), white 40%);
+  box-shadow: 0 0 12px color-mix(in oklab, var(--accent), white 30%);
+  transform-origin: left center;
+  animation: xp-fill 10s ease-in-out infinite;
+  opacity: 0.35;
+}
+@keyframes xp-fill {
+  0% {
+    transform: scaleX(0);
+  }
+  90% {
+    transform: scaleX(1);
+  }
+  100% {
+    transform: scaleX(0);
+  }
+}
+
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}

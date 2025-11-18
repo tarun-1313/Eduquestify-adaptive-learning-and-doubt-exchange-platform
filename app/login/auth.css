@@ -1,0 +1,338 @@
+/* Two-Column Split Authentication Design */
+
+/* ========================================
+   FULL VIEWPORT BACKGROUND - CLEAN AND CLEAR
+   ======================================== */
+
+.authStarfield {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background:
+    /* Clean gradient background - no blur */
+    linear-gradient(135deg,
+      #1a1a2e 0%,    /* Deep night blue */
+      #16213e 15%,   /* Dark blue */
+      #0f3460 30%,   /* Medium blue */
+      #533483 45%,   /* Purple-blue */
+      #7209b7 60%,   /* Purple */
+      #560bad 75%,   /* Deep purple */
+      #480ca8 90%,   /* Dark purple */
+      #3a0ca3 100%   /* Deep purple */
+    );
+  z-index: -1;
+}
+
+/* ========================================
+   CENTERED MODAL CONTAINER
+   ======================================== */
+
+.authStage {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  padding: 1rem; /* Add some padding to prevent edge clipping */
+}
+
+/* Main modal card */
+.authCard {
+  width: min(90vw, 1200px);
+  height: min(90vh, 800px); /* Increased height for better content visibility */
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border-radius: 24px;
+  box-shadow:
+    0 25px 50px rgba(0, 0, 0, 0.15),
+    0 0 0 1px rgba(255, 255, 255, 0.1);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  overflow: hidden;
+  position: relative;
+}
+
+/* ========================================
+   LEFT COLUMN - ILLUSTRATION PANEL
+   ======================================== */
+
+.authIllustration {
+  position: relative;
+  background:
+    /* Subtle gradient overlay for depth */
+    linear-gradient(135deg,
+      rgba(26, 26, 46, 0.1) 0%,
+      rgba(22, 33, 62, 0.05) 100%
+    );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.authIllustration img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 24px 0 0 24px; /* Match modal radius on left side */
+  display: block; /* Ensure proper display */
+  background-color: #f3f4f6; /* Fallback color while loading */
+}
+
+/* Magical particles overlay */
+.authIllustration::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(2px 2px at 25% 25%, rgba(0, 255, 255, 0.6) 40%, transparent 50%),
+    radial-gradient(2px 2px at 75% 75%, rgba(255, 165, 0, 0.4) 40%, transparent 50%),
+    radial-gradient(1px 1px at 50% 10%, rgba(255, 255, 255, 0.7) 40%, transparent 50%),
+    radial-gradient(1px 1px at 10% 90%, rgba(0, 255, 255, 0.5) 40%, transparent 50%);
+  background-size: 150px 150px, 180px 180px, 120px 120px, 160px 160px;
+  animation: authFloatParticles 8s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* Stars overlay */
+.authIllustration::after {
+  content: "";
+  position: absolute;
+  top: 15%;
+  right: 10%;
+  width: 120px;
+  height: 80px;
+  background:
+    radial-gradient(1px 1px at 20% 30%, rgba(255, 255, 255, 0.8) 40%, transparent 50%),
+    radial-gradient(1px 1px at 60% 20%, rgba(255, 255, 255, 0.6) 40%, transparent 50%),
+    radial-gradient(1px 1px at 80% 70%, rgba(255, 255, 255, 0.7) 40%, transparent 50%);
+  background-size: 25px 25px, 30px 30px, 20px 20px;
+  animation: authTwinkleStars 3s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* ========================================
+   RIGHT COLUMN - FORM SECTION
+   ======================================== */
+
+.authFormSection {
+  padding: 3rem 2.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start; /* Changed from center to flex-start */
+  background: rgba(255, 255, 255, 0.98);
+  position: relative;
+  height: 100%; /* Ensure full height */
+  overflow-y: auto; /* Allow scrolling if content overflows */
+}
+
+/* Logo and branding */
+.authBranding {
+  margin-bottom: 2rem;
+}
+
+.authBranding h1 {
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: #374151;
+  margin: 0 0 0.5rem 0;
+  line-height: 1.4;
+}
+
+.authBranding .subtitle {
+  font-size: 0.875rem;
+  color: #6b7280;
+  font-weight: 400;
+}
+
+/* Main heading */
+.authMainHeading {
+  margin-bottom: 1.5rem;
+}
+
+.authMainHeading h2 {
+  font-size: 1.875rem;
+  font-weight: 600;
+  color: #111827;
+  margin: 0;
+  line-height: 1.3;
+}
+
+/* ========================================
+   FORM ELEMENTS - MINIMALIST DESIGN
+   ======================================== */
+
+.authForm {
+  margin-bottom: 2rem;
+  width: 100%;
+}
+
+.authFormGroup {
+  margin-bottom: 1.5rem;
+  width: 100%;
+}
+
+.authFormGroup label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+  margin-bottom: 0.5rem;
+}
+
+.authFormGroup input,
+.authFormGroup select {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  color: #111827;
+  background: #ffffff;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.authFormGroup input:focus,
+.authFormGroup select:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* Submit button */
+.authSubmitButton {
+  width: 100%;
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  color: white;
+  font-weight: 600;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.authSubmitButton:hover {
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.authSubmitButton:active {
+  transform: translateY(1px);
+}
+
+.authSubmitButton:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+
+/* Secondary links */
+.authSecondaryLinks {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.875rem;
+}
+
+.authSecondaryLinks a {
+  color: #6b7280;
+  text-decoration: none;
+  transition: color 0.2s ease;
+  font-weight: 500;
+}
+
+.authSecondaryLinks a:hover {
+  color: #3b82f6;
+}
+
+/* ========================================
+   ANIMATIONS
+   ======================================== */
+
+@keyframes authFloatParticles {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-10px) rotate(1deg);
+  }
+  50% {
+    transform: translateY(0) rotate(0deg);
+  }
+  75% {
+    transform: translateY(10px) rotate(-1deg);
+  }
+}
+
+@keyframes authTwinkleStars {
+  0%, 100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* ========================================
+   RESPONSIVE DESIGN
+   ======================================== */
+
+@media (max-width: 768px) {
+  .authCard {
+    grid-template-columns: 1fr;
+    width: min(95vw, 400px);
+    height: min(95vh, 700px);
+  }
+  
+  .authIllustration {
+    display: none; /* Hide illustration on mobile */
+  }
+  
+  .authFormSection {
+    padding: 2rem 1.5rem;
+  }
+  
+  .authSecondaryLinks {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+}
+
+/* ========================================
+   ACCESSIBILITY IMPROVEMENTS
+   ======================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .authIllustration::before,
+  .authIllustration::after {
+    animation: none;
+  }
+  
+  .authSubmitButton {
+    transition: none;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .authCard {
+    background: #ffffff;
+    box-shadow: 0 0 0 2px #000000;
+  }
+  
+  .authFormGroup input,
+  .authFormGroup select {
+    border-width: 2px;
+  }
+}

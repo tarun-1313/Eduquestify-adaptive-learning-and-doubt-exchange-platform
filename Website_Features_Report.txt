@@ -1,0 +1,852 @@
+EDUQUESTIFY - COMPREHENSIVE WEBSITE FEATURES REPORT
+=====================================================
+
+TABLE OF CONTENTS
+-----------------
+1. Executive Summary
+2. User Roles and Authentication
+3. Student Features
+4. Teacher Features
+5. Core Learning Systems
+6. Analytics and Reporting
+7. Technical Architecture
+8. Security Features
+9. Conclusion
+
+=====================================================
+
+1. EXECUTIVE SUMMARY
+--------------------
+EduQuestify is a comprehensive educational platform designed to bridge the gap between teachers and students through AI-powered learning tools, real-time collaboration, and data-driven insights. The platform features a modern, responsive design with role-based access control, ensuring secure and personalized experiences for both educators and learners.
+
+Key Highlights:
+- Multi-role authentication system (Students & Teachers)
+- AI-powered question generation using Gemini API
+- Real-time doubt resolution and forum discussions
+- Comprehensive analytics and progress tracking
+- Flashcard-based learning system with mastery tracking
+- File sharing and note management system
+- Quiz generation with adaptive difficulty levels
+- Gamification elements (XP, levels, achievements, streaks)
+
+1.1 SYSTEM ARCHITECTURE OVERVIEW
+--------------------------------
+
+**Visual Architecture Diagram:**
+A comprehensive system architecture diagram has been created and saved as `system-architecture.svg` in the project root directory.
+
+**Alternative Views:** 
+- `architecture-simple.svg` - Simplified version of the architecture diagram
+- `architecture.html` - Interactive HTML version that can be opened in any web browser
+
+If you experience issues loading the SVG files, please open `architecture.html` in your web browser for the interactive architecture diagram.
+
+**Text-Based Architecture Overview:**
+
+```
+┌─────────────────────────────────────────────────────────────────────────────────────────┐
+│                                   CLIENT LAYER                                          │
+├─────────────────────────────────────────────────────────────────────────────────────────┤
+│  ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐  │
+│  │   Web Browser   │  │   Mobile Web    │  │   Progressive   │  │   Responsive    │  │
+│  │   (React/Next)  │  │   (React/Next)  │  │   Web App       │  │   Design        │  │
+│  └────────┬────────┘  └────────┬────────┘  └────────┬────────┘  └────────┬────────┘  │
+│           │                     │                     │                     │         │
+│  ┌────────┴───────────────────────────────────────────────────────────────────┐       │
+│  │                        FRONTEND FRAMEWORK                                   │       │
+│  │  ┌───────────────────────────────────────────────────────────────────────┐  │       │
+│  │  │                    Next.js 14 with React 18                         │  │       │
+│  │  │  ├─ Server-Side Rendering (SSR)                                     │  │       │
+│  │  │  ├─ Static Site Generation (SSG)                                 │  │       │
+│  │  │  ├─ API Routes for Backend Integration                           │  │       │
+│  │  │  ├─ TypeScript for Type Safety                                   │  │       │
+│  │  │  ├─ Tailwind CSS for Styling                                     │  │       │
+│  │  │  └─ Framer Motion for Animations                                 │  │       │
+│  │  └───────────────────────────────────────────────────────────────────────┘  │       │
+│  └───────────────────────────────────────────────────────────────────────────────┘       │
+└─────────────────────────────────────────────────────────────────────────────────────────┘
+                                           │
+                                           │ HTTP/HTTPS
+                                           │ WebSocket (Socket.io)
+                                           │ Server-Sent Events
+                                           ▼
+┌─────────────────────────────────────────────────────────────────────────────────────────┐
+│                                  APPLICATION LAYER                                        │
+├─────────────────────────────────────────────────────────────────────────────────────────┤
+│  ┌───────────────────────────────────────────────────────────────────────────────┐      │
+│  │                        API GATEWAY & MIDDLEWARE                              │      │
+│  │  ├─ JWT Authentication & Authorization                                     │      │
+│  │  ├─ Role-Based Access Control (RBAC)                                      │      │
+│  │  ├─ Rate Limiting & Throttling                                             │      │
+│  │  ├─ Request Validation & Sanitization                                      │      │
+│  │  ├─ CORS & Security Headers                                               │      │
+│  │  └─ Error Handling & Logging                                                │      │
+│  └───────────────────────────────────────────────────────────────────────────────┘      │
+│                                           │                                             │
+│  ┌──────────────────────────────────┴────────────────────────────────────────┐    │
+│  │                           BUSINESS LOGIC LAYER                                    │    │
+│  │  ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐  ┌──────────┐ │    │
+│  │  │   Authentication  │  │   Content         │  │   Gamification  │  │  Real-   │ │    │
+│  │  │   Service         │  │   Management      │  │   Service       │  │  time     │ │    │
+│  │  │  (Auth.js/JWT)   │  │  (AI/Gemini API) │  │  (XP/Coins)     │  │  (Socket) │ │    │
+│  │  └────────┬────────┘  └────────┬────────┘  └────────┬────────┘  └────┬───────┘ │    │
+│  │           │                     │                     │                │         │    │
+│  │  ┌────────┴────────┐  ┌────────┴────────┐  ┌────────┴────────┐  ┌────┴──────┐    │    │
+│  │  │   Question Bank  │  │   Quiz &        │  │   Progress        │  │  Doubt    │    │    │
+│  │  │   Management     │  │   Flashcard     │  │   Tracking        │  │  Resolution│    │    │
+│  │  │  (AI Generation)│  │   Services       │  │  (Analytics)      │  │  (Chat)   │    │    │
+│  │  └────────┬────────┘  └────────┬────────┘  └────────┬────────┘  └────┬───────┘    │    │
+│  │           │                     │                     │                │            │    │
+│  │  ┌────────┴─────────────────────┴─────────────────────┴────────────────┐          │    │
+│  │  │                    DATA ACCESS LAYER (DAL)                            │          │    │
+│  │  │  ├─ Database Connection Pooling                                      │          │    │
+│  │  │  ├─ Query Optimization & Caching                                     │          │    │
+│  │  │  ├─ Transaction Management                                           │          │    │
+│  │  │  ├─ ORM/Query Builder (Prisma/SQL)                                  │          │    │
+│  │  │  └─ Data Validation & Sanitization                                    │          │    │
+│  │  └────────────────────────────────────────────────────────────────────────┘          │    │
+│  └──────────────────────────────────────────────────────────────────────────────────────┘    │
+└─────────────────────────────────────────────────────────────────────────────────────────┘
+                                           │
+                                           │ SQL Queries
+                                           │ Connection Pooling
+                                           │ Transaction Management
+                                           ▼
+┌─────────────────────────────────────────────────────────────────────────────────────────┐
+│                                   DATA LAYER                                            │
+├─────────────────────────────────────────────────────────────────────────────────────────┤
+│  ┌───────────────────────────────────────────────────────────────────────────────┐      │
+│  │                        PRIMARY DATABASE (MySQL)                               │      │
+│  │  ├─ Users & Authentication Tables                                            │      │
+│  │  │  • users, user_stats, sessions                                           │      │
+│  │  ├─ Learning Content Tables                                                  │      │
+│  │  │  • question_banks, quiz_attempts, flashcard_sessions                   │      │
+│  │  ├─ Collaboration Tables                                                    │      │
+│  │  │  • doubts, messages, notes, forum_posts                                  │      │
+│  │  ├─ Analytics Tables                                                         │      │
+│  │  │  • subject_mastery, user_progress, downloads                           │      │
+│  │  └─ Gamification Tables                                                     │      │
+│  │     • achievements, leaderboards, notifications                            │      │
+│  └───────────────────────────────────────────────────────────────────────────────┘      │
+│                                           │                                             │
+│  ┌───────────────────────────────────────────────────────────────────────────────┐      │
+│  │                        FILE STORAGE & CDN                                    │      │
+│  │  ├─ Document Uploads (PDFs, Images, Notes)                                  │      │
+│  │  ├─ Profile Pictures & Media Files                                         │      │
+│  │  ├─ Question Bank Attachments                                            │      │
+│  │  └─ Backup & Version Control                                               │      │
+│  └───────────────────────────────────────────────────────────────────────────────┘      │
+│                                           │                                             │
+│  ┌───────────────────────────────────────────────────────────────────────────────┐      │
+│  │                        EXTERNAL SERVICES                                     │      │
+│  │  ├─ Google Gemini AI API                                                   │      │
+│  │  │  • Question Generation                                                   │      │
+│  │  │  • Content Analysis                                                      │      │
+│  │  │  • Text Summarization                                                    │      │
+│  │  ├─ Authentication Providers                                               │      │
+│  │  │  • JWT Token Management                                                  │      │
+│  │  │  • OAuth Integration                                                     │      │
+│  │  ├─ Email Services                                                         │      │
+│  │  │  • Notification Delivery                                               │      │
+│  │  │  • Password Reset                                                       │      │
+│  │  └─ Analytics & Monitoring                                                 │      │
+│  │     • Performance Tracking                                                 │      │
+│  │     • Error Reporting                                                      │      │
+│  └───────────────────────────────────────────────────────────────────────────────┘      │
+└─────────────────────────────────────────────────────────────────────────────────────────┘
+
+TECHNICAL SPECIFICATIONS:
+• Frontend: Next.js 14, React 18, TypeScript, Tailwind CSS
+• Backend: Next.js API Routes, Node.js, Express.js
+• Database: MySQL with InnoDB engine
+• Real-time: Socket.io for chat and notifications
+• Authentication: JWT tokens with refresh mechanism
+• AI Integration: Google Gemini API
+• File Storage: Local/Cloud storage with CDN
+• Deployment: Vercel/Node.js server
+• Security: HTTPS, CORS, Rate limiting, Input validation
+
+| Sr. No. | Table Name              | Attributes                                                                                             | Data Types                                                                                             |
+|---------|-------------------------|--------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------|
+| 1       | users                   | id (PK), username, email, password_hash, full_name, created_at, updated_at                             | INT, VARCHAR(50), VARCHAR(100), VARCHAR(255), VARCHAR(100), TIMESTAMP, TIMESTAMP                       |
+| 2       | doubt_messages          | id (PK), doubt_id (FK), user_id (FK), message, created_at                                              | INT, INT, INT, TEXT, TIMESTAMP                                                                         |
+| 3       | doubts                  | id (PK), user_id (FK), title, content, created_at, status                                              | INT, INT, VARCHAR(255), TEXT, TIMESTAMP, ENUM('open','resolved')                                      |
+| 4       | favorites               | id (PK), user_id (FK), item_id, item_type, created_at                                                  | INT, INT, INT, VARCHAR(50), TIMESTAMP                                                                  |
+| 5       | flashcard_mastery       | mastery_id (PK), user_id (FK), subject_id (FK), mastery_level, last_reviewed_at                        | INT, INT, INT, DECIMAL(5,2), TIMESTAMP                                                                 |
+| 6       | flashcard_performance   | performance_id (PK), session_id (FK), flashcard_id (FK), score, timestamp                              | INT, INT, INT, INT, TIMESTAMP                                                                          |
+| 7       | flashcard_sessions      | session_id (PK), user_id (FK), subject_id, created_at, updated_at, status                              | INT, INT, INT, TIMESTAMP, TIMESTAMP, ENUM('active','completed','paused')                            |
+| 8       | flashcard_subjects      | subject_id (PK), name, created_at                                                                      | INT, VARCHAR(100), TIMESTAMP                                                                           |
+| 9       | note_comments           | comment_id (PK), note_id (FK), user_id (FK), comment_text, created_at                                  | INT, INT, INT, TEXT, TIMESTAMP                                                                         |
+| 10      | note_likes              | like_id (PK), note_id (FK), user_id (FK), liked_at                                                     | INT, INT, INT, TIMESTAMP                                                                               |
+| 11      | note_ratings            | rating_id (PK), note_id (FK), user_id (FK), rating, created_at                                         | INT, INT, INT, INT, TIMESTAMP                                                                          |
+| 12      | note_tags               | note_id (FK), tag_id (FK)                                                                              | INT, INT                                                                                               |
+| 13      | note_views              | view_id (PK), note_id (FK), user_id (FK), viewed_at                                                    | INT, INT, INT, TIMESTAMP                                                                               |
+| 14      | notes                   | note_id (PK), user_id (FK), title, content, created_at, updated_at                                     | INT, INT, VARCHAR(100), TEXT, TIMESTAMP, TIMESTAMP                                                     |
+| 15      | notifications           | id (PK), user_id (FK), type, message, is_read, created_at                                              | INT, INT, VARCHAR(50), TEXT, BOOLEAN, TIMESTAMP                                                        |
+| 16      | question_bank           | id (PK), user_id (FK), title, subject, created_at, updated_at                                          | INT, INT, VARCHAR(100), VARCHAR(50), TIMESTAMP, TIMESTAMP                                              |
+| 17      | question_bank_downloads | download_id (PK), user_id (FK), bank_id (FK), downloaded_at                                            | INT, INT, INT, TIMESTAMP                                                                               |
+| 18      | quiz_attempts           | attempt_id (PK), user_id (FK), quiz_id (FK), score, started_at, completed_at                           | INT, INT, INT, DECIMAL(5,2), TIMESTAMP, TIMESTAMP                                                      |
+| 19      | shared_notes            | share_id (PK), note_id (FK), shared_by_user_id (FK), shared_with_user_id (FK), shared_at               | INT, INT, INT, INT, TIMESTAMP                                                                          |
+| 20      | subject_mastery         | mastery_id (PK), user_id (FK), subject_id (FK), mastery_level, last_updated                            | INT, INT, INT, DECIMAL(5,2), TIMESTAMP                                                                 |
+| 21      | subjects                | subject_id (PK), name, created_at                                                                      | INT, VARCHAR(100), TIMESTAMP                                                                           |
+| 22      | tags                    | tag_id (PK), name                                                                                      | INT, VARCHAR(50)                                                                                       |
+| 23      | user_progress           | progress_id (PK), user_id (FK), course_id (FK), progress_percentage, last_updated                      | INT, INT, INT, DECIMAL(5,2), TIMESTAMP                                                                 |
+| 24      | user_starred_notes      | star_id (PK), user_id (FK), note_id (FK), starred_at                                                   | INT, INT, INT, TIMESTAMP                                                                               |
+
+.2 DATABASE SCHEMA (MySQL)
+---------------------------
+
+```
+CREATE TABLE users (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  username VARCHAR(50) NOT NULL UNIQUE,
+  email VARCHAR(100) NOT NULL UNIQUE,
+  password_hash VARCHAR(255) NOT NULL,
+  full_name VARCHAR(100),
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE subjects (
+  subject_id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(100) NOT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+CREATE TABLE flashcard_subjects (
+  subject_id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(100) NOT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE notes (
+  note_id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  title VARCHAR(100) NOT NULL,
+  content TEXT NOT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  CONSTRAINT fk_notes_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE question_bank (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  title VARCHAR(100) NOT NULL,
+  subject VARCHAR(50) NOT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  CONSTRAINT fk_qb_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE question_bank_downloads (
+  download_id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  bank_id INT NOT NULL,
+  downloaded_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_qbd_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+  CONSTRAINT fk_qbd_bank FOREIGN KEY (bank_id) REFERENCES question_bank(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE doubts (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  title VARCHAR(255) NOT NULL,
+  content TEXT NOT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  status ENUM('open','resolved') NOT NULL DEFAULT 'open',
+  CONSTRAINT fk_doubts_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE doubt_messages (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  doubt_id INT NOT NULL,
+  user_id INT NOT NULL,
+  message TEXT NOT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_dm_doubt FOREIGN KEY (doubt_id) REFERENCES doubts(id) ON DELETE CASCADE,
+  CONSTRAINT fk_dm_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE favorites (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  item_id INT NOT NULL,
+  item_type VARCHAR(50) NOT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE KEY uniq_favorite (user_id, item_type, item_id),
+  CONSTRAINT fk_fav_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+
+CREATE TABLE flashcard_mastery (
+  mastery_id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  subject_id INT NOT NULL,
+  mastery_level DECIMAL(5,2) NOT NULL,
+  last_reviewed_at TIMESTAMP NULL,
+  CONSTRAINT fk_fm_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+  CONSTRAINT fk_fm_subject FOREIGN KEY (subject_id) REFERENCES flashcard_subjects(subject_id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+CREATE TABLE note_likes (
+  like_id INT AUTO_INCREMENT PRIMARY KEY,
+  note_id INT NOT NULL,
+  user_id INT NOT NULL,
+  liked_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE KEY uniq_like (note_id, user_id),
+  CONSTRAINT fk_nl_note FOREIGN KEY (note_id) REFERENCES notes(note_id) ON DELETE CASCADE,
+  CONSTRAINT fk_nl_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE note_ratings (
+  rating_id INT AUTO_INCREMENT PRIMARY KEY,
+  note_id INT NOT NULL,
+  user_id INT NOT NULL,
+  rating INT NOT NULL,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE KEY uniq_rating (note_id, user_id),
+  CONSTRAINT fk_nr_note FOREIGN KEY (note_id) REFERENCES notes(note_id) ON DELETE CASCADE,
+  CONSTRAINT fk_nr_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE note_tags (
+  note_id INT NOT NULL,
+  tag_id INT NOT NULL,
+  UNIQUE KEY uniq_note_tag (note_id, tag_id),
+  CONSTRAINT fk_nt_note FOREIGN KEY (note_id) REFERENCES notes(note_id) ON DELETE CASCADE,
+  CONSTRAINT fk_nt_tag FOREIGN KEY (tag_id) REFERENCES tags(tag_id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE note_views (
+  view_id INT AUTO_INCREMENT PRIMARY KEY,
+  note_id INT NOT NULL,
+  user_id INT NOT NULL,
+  viewed_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_nv_note FOREIGN KEY (note_id) REFERENCES notes(note_id) ON DELETE CASCADE,
+  CONSTRAINT fk_nv_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE notifications (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  type VARCHAR(50) NOT NULL,
+  message TEXT NOT NULL,
+  is_read BOOLEAN NOT NULL DEFAULT FALSE,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_notif_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE quiz_attempts (
+  attempt_id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  quiz_id INT NOT NULL,
+  score DECIMAL(5,2) NOT NULL,
+  started_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  completed_at TIMESTAMP NULL,
+  CONSTRAINT fk_qa_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE shared_notes (
+  share_id INT AUTO_INCREMENT PRIMARY KEY,
+  note_id INT NOT NULL,
+  shared_by_user_id INT NOT NULL,
+  shared_with_user_id INT NOT NULL,
+  shared_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_sn_note FOREIGN KEY (note_id) REFERENCES notes(note_id) ON DELETE CASCADE,
+  CONSTRAINT fk_sn_by FOREIGN KEY (shared_by_user_id) REFERENCES users(id) ON DELETE CASCADE,
+  CONSTRAINT fk_sn_with FOREIGN KEY (shared_with_user_id) REFERENCES users(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE subject_mastery (
+  mastery_id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  subject_id INT NOT NULL,
+  mastery_level DECIMAL(5,2) NOT NULL,
+  last_updated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_sm_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+  CONSTRAINT fk_sm_subject FOREIGN KEY (subject_id) REFERENCES subjects(subject_id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE user_progress (
+  progress_id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  course_id INT NOT NULL,
+  progress_percentage DECIMAL(5,2) NOT NULL,
+  last_updated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT fk_up_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE user_starred_notes (
+  star_id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  note_id INT NOT NULL,
+  starred_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE KEY uniq_star (user_id, note_id),
+  CONSTRAINT fk_usn_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+  CONSTRAINT fk_usn_note FOREIGN KEY (note_id) REFERENCES notes(note_id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+```
+
+2. USER ROLES AND AUTHENTICATION
+--------------------------------
+
+A. STUDENT ROLE
+- Access to learning materials and question banks
+- Ability to create and participate in quizzes
+- Flashcard learning with progress tracking
+- Forum participation for doubt resolution
+- Note sharing and collaboration features
+- Progress analytics and performance insights
+- Gamified learning experience with XP and achievements
+
+B. TEACHER ROLE
+- Full access to AI-powered question bank creation
+- Student progress monitoring and analytics
+- Real-time doubt resolution support
+- Content creation and management tools
+- Download analytics and usage statistics
+- Assignment creation and management
+- Direct communication with students
+
+C. AUTHENTICATION SYSTEM
+- JWT-based secure authentication
+- Role-based middleware protection
+- Session management with automatic expiration
+- Cookie-based token storage
+- Protected routes with automatic redirects
+- User profile management and personalization
+
+3. STUDENT FEATURES
+-------------------
+
+A. STUDENT DASHBOARD
+- Personalized learning dashboard with progress overview
+- XP tracking and level progression system
+- Daily quest assignments with rewards
+- Subject mastery visualization with progress bars
+- Recent activity timeline
+- Achievement system with badges and rewards
+- Community updates and social features
+- Assignment tracking with due dates and priorities
+
+B. LEARNING DASHBOARD
+- Comprehensive activity tracking across all learning modules
+- Real-time statistics for quizzes, flashcards, and question banks
+- Recent activity feed with detailed history
+- Performance metrics and improvement suggestions
+- Subject-wise progress tracking
+- Time-based activity analysis
+
+C. QUESTION BANK SYSTEM
+- Interactive chatbot interface for question discovery
+- AI-powered question generation based on topics
+- Difficulty level customization (Easy, Medium, Hard)
+- Subject and topic filtering
+- Real-time question answering with explanations
+- Chat history preservation and management
+
+D. FLASHCARD SYSTEM
+- Spaced repetition learning algorithm
+- Mastery level tracking for each subject/topic
+- Performance analytics with accuracy metrics
+- Session-based learning with progress saving
+- Difficulty adaptation based on user performance
+- Streak tracking and motivation features
+- Review scheduling and notification system
+
+E. QUIZ SYSTEM
+- Adaptive quiz generation with AI
+- Multiple difficulty levels and question counts
+- Real-time scoring and feedback
+- Performance analysis with topic-wise breakdown
+- XP rewards based on difficulty and performance
+- Quiz history and progress tracking
+- Custom quiz creation with specific parameters
+
+F. NOTES SYSTEM
+- File upload and sharing capabilities
+- Subject-based organization
+- Search and filtering functionality
+- View count tracking and popularity metrics
+- Like and comment system for engagement
+- User profile integration
+- Real-time updates and notifications
+
+G. FORUM SYSTEM
+- Doubt posting and question creation
+- Answer submission and voting system
+- Real-time discussion threads
+- Subject categorization and tagging
+- User reputation and contribution tracking
+- Notification system for responses
+- Community-driven knowledge sharing
+
+4. TEACHER FEATURES
+-------------------
+
+A. TEACHER DASHBOARD
+- Comprehensive overview of teaching activities
+- Student progress monitoring and analytics
+- Question bank creation and management
+- Real-time student doubt notifications
+- Performance metrics and class statistics
+- Content creation tools and AI assistance
+- Assignment management and tracking
+
+B. AI-POWERED QUESTION BANK CREATION
+- Gemini API integration for intelligent question generation
+- Subject and topic customization
+- Difficulty level control and adaptation
+- Bulk question generation capabilities
+- Quality assurance and review system
+- Student-specific customization options
+- Export and sharing functionality
+
+C. STUDENT ANALYTICS
+- Individual student progress tracking
+- Class-wide performance metrics
+- Subject-wise performance analysis
+- Download statistics and usage analytics
+- Time-based activity monitoring
+- Engagement metrics and participation tracking
+- Performance comparison and benchmarking
+
+D. DOUBT RESOLUTION SYSTEM
+- Real-time doubt notification system
+- Priority-based doubt assignment
+- Student-teacher communication channels
+- Resolution tracking and feedback system
+- Knowledge base creation from resolved doubts
+- Community contribution recognition
+
+E. CONTENT MANAGEMENT
+- Lecture note organization and sharing
+- Assignment creation and distribution
+- Resource management and categorization
+- Version control and update tracking
+- Access control and permission management
+- Collaborative content creation tools
+
+5. CORE LEARNING SYSTEMS
+-------------------------
+
+A. AI INTEGRATION (GEMINI API)
+- Intelligent question generation from text input
+- Performance analysis and improvement suggestions
+- Adaptive learning path recommendations
+- Natural language processing for doubt resolution
+- Content summarization and key point extraction
+- Personalized learning recommendations
+
+B. GAMIFICATION SYSTEM
+- XP (Experience Points) accumulation system
+- Level progression with increasing requirements
+- Achievement badges and recognition
+- Daily streak tracking and rewards
+- Leaderboard and competitive elements
+- Coin-based reward system for activities
+- Special achievements for milestones
+
+C. PROGRESS TRACKING
+- Comprehensive learning analytics
+- Subject-wise performance monitoring
+- Time-based progress visualization
+- Mastery level calculations
+- Improvement trend analysis
+- Goal setting and achievement tracking
+- Personalized learning recommendations
+
+D. REAL-TIME FEATURES
+- Live doubt resolution chat
+- Real-time notifications and updates
+- Instant feedback on quiz attempts
+- Live progress updates
+- Community activity streams
+- Synchronized learning sessions
+
+6. ANALYTICS AND REPORTING
+--------------------------
+
+A. DOWNLOAD ANALYTICS
+- Comprehensive download statistics
+- User behavior analysis
+- Subject-wise popularity metrics
+- Time-based usage patterns
+- Geographic distribution analysis
+- Device and platform analytics
+- Performance optimization insights
+
+B. STUDENT PERFORMANCE ANALYTICS
+- Individual progress tracking
+- Subject mastery visualization
+- Quiz performance analysis
+- Flashcard effectiveness metrics
+- Learning pattern identification
+- Improvement suggestions
+- Predictive performance modeling
+
+C. TEACHER ANALYTICS
+- Class performance overview
+- Student engagement metrics
+- Content effectiveness analysis
+- Teaching impact measurement
+- Time allocation insights
+- Student feedback analysis
+- Professional development tracking
+
+7. TECHNICAL ARCHITECTURE
+-------------------------
+
+A. FRONTEND TECHNOLOGY
+- Next.js 14 with React 18
+- TypeScript for type safety
+- Tailwind CSS for responsive design
+- Framer Motion for animations
+- Shadcn/ui components library
+- Client-side state management
+- Progressive Web App capabilities
+
+B. BACKEND ARCHITECTURE
+- Node.js with Express framework
+- MySQL database for data persistence
+- JWT authentication system
+- RESTful API design
+- Socket.io for real-time features
+- File upload and storage system
+- Caching and performance optimization
+
+C. DATABASE STRUCTURE (MySQL)
+The MySQL database serves as the central data persistence layer for EduQuestify, implementing a relational schema that efficiently stores and manages all platform data while maintaining referential integrity through foreign key relationships. The database architecture follows normalized design principles to minimize data redundancy and ensure consistency across all system components.
+
+CORE TABLES AND RELATIONSHIPS:
+
+1. USERS TABLE (Central Entity)
+The users table forms the foundation of the authentication and authorization system, storing essential user information with the following structure:
+- id (INT, Primary Key, Auto-increment): Unique identifier for each user
+- email (VARCHAR(191), Unique, Not Null): User's email address for authentication
+- phone (VARCHAR(32), Nullable): Optional contact number
+- name (VARCHAR(191), Not Null): User's display name
+- password_hash (VARCHAR(255), Not Null): Bcrypt-hashed password for security
+- role (ENUM('Student','Teacher'), Not Null): Defines user permissions and access levels
+- created_at (DATETIME, Not Null): Account creation timestamp
+
+This table establishes the primary relationship foundation, with all other tables referencing the users.id field through foreign key constraints, ensuring data integrity when users are deleted or modified.
+
+2. USER_STATS TABLE (Performance Tracking)
+Directly linked to users through user_id (Primary Key, Foreign Key), this table maintains gamification metrics:
+- xp (INT, Default 0): Experience points earned through activities
+- coins (INT, Default 0): Virtual currency for platform engagement
+- streak (INT, Default 0): Consecutive daily login count
+- last_active_at (DATETIME, Nullable): Timestamp of last platform activity
+
+The one-to-one relationship ensures each user has exactly one stats record, with CASCADE deletion maintaining referential integrity.
+
+3. QUESTION BANK SYSTEM TABLES
+Multiple interconnected tables manage the question bank functionality:
+
+question_banks Table:
+- id, title, description, subject, topic, department, year
+- status (ENUM: draft, published, archived)
+- question_count, student_count, avg_performance
+- created_by (Foreign Key → users.id)
+- created_at, updated_at timestamps
+
+question_bank_downloads Table (Analytics):
+- Tracks user download behavior with foreign keys to users and question_banks
+- Stores download metadata: timestamp, IP address, user agent, download count
+- Implements unique constraints to prevent duplicate tracking
+- Comprehensive indexing for analytics queries
+
+4. FLASHCARD SYSTEM TABLES
+Sophisticated tracking system for spaced repetition learning:
+
+flashcard_sessions Table:
+- user_id (Foreign Key → users.id)
+- subject, topic, total_flashcards, completed_flashcards
+- correct_answers, session_duration_seconds
+- difficulty_level, status, timestamps
+
+flashcard_performance Table:
+- session_id (Foreign Key → flashcard_sessions.id)
+- Detailed performance tracking: question_text, answer_text, user_answer
+- is_correct, difficulty, time_spent_seconds
+- Enables granular analysis of learning patterns
+
+5. QUIZ SYSTEM TABLES
+Comprehensive quiz tracking and progress monitoring:
+
+quiz_attempts Table:
+- user_id (Foreign Key → users.id)
+- subject, topic, difficulty, score, total_questions, percentage
+- completed_at timestamp with indexing for performance
+
+subject_mastery Table:
+- user_id (Foreign Key → users.id)
+- subject, mastery_level, quizzes_taken, average_score
+- Unique constraint on (user_id, subject) prevents duplicates
+- Tracks learning progression across subjects
+
+6. NOTES AND COLLABORATION TABLES
+File sharing and interaction system:
+
+notes Table:
+- user_id (Foreign Key → users.id)
+- title, description, subject, file_path, original_filename
+- File metadata: mime_type, size_bytes, view/like/comment counts
+- Timestamps for creation and updates
+
+Shared Notes System:
+- shared_notes table for public note distribution
+- note_ratings table with foreign keys to shared_notes and users
+- Comprehensive indexing for search and filtering operations
+
+7. DOUBT RESOLUTION SYSTEM TABLES
+Real-time chat and discussion functionality:
+
+doubts Table:
+- user_id (Foreign Key → users.id)
+- title, description, subject, status (open/resolved)
+- Timestamps with automatic update tracking
+
+messages Table:
+- doubt_id (Foreign Key → doubts.id)
+- sender_id (Foreign Key → users.id)
+- content, timestamps
+- Enables threaded discussions with proper relationship management
+
+8. NOTIFICATIONS TABLE
+Comprehensive notification system:
+- user_id (Foreign Key → users.id)
+- message, type, related_id, seen/read_at status
+- Supports various notification types with flexible relationship mapping
+- Implements proper indexing for efficient query performance
+
+INTERCONNECTION ARCHITECTURE:
+
+The database design implements a hub-and-spoke model with the users table as the central entity. All user-generated content and activities maintain direct relationships to users through foreign key constraints, enabling:
+
+- CASCADE deletion: When users are removed, all associated data is automatically cleaned up
+- Referential integrity: Prevents orphaned records and maintains data consistency
+- Efficient querying: Indexed foreign keys enable fast joins for user-specific data retrieval
+- Analytics capabilities: Centralized user identification enables comprehensive activity tracking
+
+The schema supports complex queries for analytics, such as tracking user progress across subjects, monitoring engagement patterns, analyzing learning effectiveness, and generating performance reports. Composite indexes optimize common query patterns, while proper normalization ensures data consistency and minimizes redundancy.
+
+D. SECURITY FEATURES
+- JWT token-based authentication
+- Role-based access control
+- Input validation and sanitization
+- SQL injection prevention
+- XSS protection measures
+- Secure file upload handling
+- Rate limiting and abuse prevention
+
+8. SECURITY FEATURES
+--------------------
+
+A. AUTHENTICATION SECURITY
+- JWT tokens with expiration
+- Secure cookie storage
+- Password hashing (bcrypt)
+- Session management
+- Automatic logout on expiration
+- Token refresh mechanisms
+
+B. DATA PROTECTION
+- Input validation and sanitization
+- SQL injection prevention
+- XSS attack protection
+- CSRF token implementation
+- File upload security
+- Data encryption for sensitive information
+
+C. ACCESS CONTROL
+- Role-based permissions
+- Route protection middleware
+- API endpoint security
+- Resource access restrictions
+- Administrative controls
+- Audit logging for security events
+
+7. UNIQUE FUNCTIONALITY AND ADVANCED FEATURES
+--------------------------------------------
+
+A. REAL-TIME COLLABORATION SYSTEM
+EduQuestify implements a sophisticated real-time collaboration infrastructure that transforms traditional learning into an interactive experience. The platform features a Socket.io-powered chat system that enables instant communication between students and teachers during doubt resolution sessions. This system includes advanced features such as typing indicators that show when participants are composing messages, creating a more natural conversation flow. The real-time chat supports file sharing within doubt discussions, allowing users to upload and share documents, images, and notes directly within the conversation context. The system maintains message persistence while providing instant delivery, ensuring that no communication is lost even during network interruptions.
+
+B. MULTIMEDIA CONTENT PROCESSING AND AI ANALYSIS
+The platform incorporates advanced multimedia processing capabilities that leverage Google's Gemini Vision API for intelligent content analysis. Users can upload various document formats including PDFs, Word documents, images, and text files, which are then processed to extract meaningful educational content. The system can analyze uploaded PDF documents and automatically generate relevant multiple-choice questions based on the extracted text. This feature supports up to 10 pages of document processing with intelligent text extraction that preserves formatting and structure. The AI analysis includes content summarization, key point extraction, and the generation of educational questions with appropriate difficulty levels and comprehensive explanations.
+
+C. ADVANCED GAMIFICATION AND MOTIVATION SYSTEM
+EduQuestify features a comprehensive gamification ecosystem designed to maximize student engagement and motivation. The platform implements a multi-layered reward system that includes experience points (XP), virtual coins, achievement badges, and daily streak tracking. Students earn XP through various learning activities including quiz completion, flashcard reviews, and forum participation, with bonus rewards for consecutive daily engagement. The system features animated progress bars and visual feedback during activities, creating an immersive learning experience. Special achievements are unlocked for milestones such as perfect quiz scores, streak maintenance, and subject mastery, providing continuous motivation for learners.
+
+D. INTELLIGENT CONTENT GENERATION AND ADAPTATION
+The platform's AI integration goes beyond simple question generation to create a truly adaptive learning experience. The Gemini API integration enables dynamic content creation that adapts to individual student performance and learning patterns. The system can generate personalized quiz questions based on identified knowledge gaps, create targeted flashcard sets for specific topics, and provide intelligent study recommendations. The AI analyzes student performance data to suggest optimal learning paths, recommend difficulty adjustments, and identify areas requiring additional focus. This adaptive approach ensures that each student receives a customized learning experience tailored to their individual needs and progress rate.
+
+E. COMPREHENSIVE ANALYTICS AND INSIGHTS ENGINE
+EduQuestify implements a sophisticated analytics engine that provides deep insights into learning patterns and platform usage. The system tracks detailed metrics including download statistics with geographic distribution analysis, user behavior patterns across different subjects and difficulty levels, and time-based usage trends. Teachers receive comprehensive dashboards showing class-wide performance metrics, individual student progress tracking, and engagement analytics. The platform generates automated reports on subject mastery levels, improvement trends, and learning effectiveness, enabling data-driven educational decisions.
+
+F. ADVANCED NOTIFICATION AND COMMUNICATION SYSTEM
+The platform features a multi-channel notification system that keeps users engaged and informed about relevant activities. The system supports various notification types including doubt resolution updates, achievement unlocks, daily quest reminders, and collaborative activity alerts. Notifications are delivered through multiple channels including real-time pop-ups, email summaries, and in-app messaging. The system includes intelligent filtering to prevent notification fatigue while ensuring important updates reach users promptly.
+
+G. COLLABORATIVE LEARNING ENVIRONMENTS
+EduQuestify creates virtual learning communities through its advanced forum and collaboration features. The platform supports threaded discussions with voting systems, enabling quality content to surface naturally. Users can create study groups, share notes collaboratively, and participate in subject-specific communities. The system includes reputation tracking that recognizes valuable contributions, encouraging active participation and knowledge sharing among community members.
+
+8. STUDENT INTERACTION AND ENGAGEMENT STRATEGIES
+------------------------------------------------
+
+A. PERSONALIZED LEARNING JOURNEY
+Students interact with EduQuestify through a carefully designed progression system that adapts to their individual learning style and pace. Upon first login, students complete a brief assessment that helps the platform understand their current knowledge level across different subjects. The system then creates a personalized dashboard that displays relevant content recommendations, suggested learning paths, and achievable goals. The interface uses friendly, encouraging language with progress indicators that show students exactly where they stand and what they need to accomplish next. Students can customize their learning experience by selecting preferred subjects, setting daily goals, and choosing between different learning modes such as "quick review" for busy days or "deep dive" for intensive study sessions.
+
+B. GAMIFIED ENGAGEMENT MECHANICS
+The platform transforms learning into an engaging adventure through multiple interaction layers. Students earn experience points (XP) for every activity, from simple logins to complex quiz completions, with visual feedback showing their progress in real-time. Animated progress bars fill up as students work through materials, providing immediate satisfaction and motivation. The coin system allows students to "purchase" premium features like advanced analytics or custom study materials, teaching financial literacy while encouraging continued participation. Daily streaks create habit-forming behavior, with students receiving gentle reminders about maintaining their learning streaks. Achievement badges unlock at key milestones, with special celebrations for perfect scores, streak maintenance, and subject mastery. Students can view their complete progress history through interactive charts that show improvement over time, making learning feel like leveling up in a game.
+
+C. SOCIAL LEARNING AND COMMUNITY INTERACTION
+EduQuestify fosters a vibrant learning community where students can interact with peers who share similar educational goals. The forum system enables students to ask questions, share insights, and help fellow learners, creating a collaborative environment that extends beyond traditional classroom boundaries. Students can form study groups around specific subjects or exams, sharing notes and quiz results within their private groups. The reputation system rewards helpful contributions, encouraging students to become mentors for topics they've mastered. Real-time chat functionality allows instant communication during study sessions, making remote learning feel more connected. Students can follow their favorite contributors, bookmark helpful discussions, and receive notifications when someone responds to their posts or questions.
+
+D. INTELLIGENT CONTENT DISCOVERY
+The platform's AI-powered recommendation engine ensures students always find relevant and engaging content. Based on their performance history, the system suggests question banks that match their current skill level while gradually increasing difficulty to maintain the optimal challenge level. Students receive personalized study schedules that consider their available time, upcoming exams, and learning preferences. The content feed adapts to show materials from subjects where students need the most improvement, while still offering variety to prevent monotony. Smart notifications alert students about new content in their areas of interest, upcoming deadlines, or when friends are studying similar topics. The system learns from student behavior, refining recommendations to become more accurate over time.
+
+E. MULTIMEDIA-RICH INTERACTION
+Students engage with diverse content formats that cater to different learning styles. Visual learners can access infographics, diagrams, and video explanations that accompany text-based materials. The document upload feature allows students to submit their own study materials, which the AI processes to generate personalized quizzes and summaries. Interactive flashcards include images, audio pronunciations, and even video clips for complex concepts. Students can highlight important sections, add personal notes, and create custom study guides from existing materials. The platform supports various file formats including PDFs, Word documents, PowerPoint presentations, and images, ensuring students can work with their preferred study materials.
+
+F. REAL-TIME FEEDBACK AND SUPPORT
+Immediate feedback mechanisms keep students engaged and informed about their progress. After completing quizzes, students receive detailed explanations for each answer, helping them understand concepts rather than just memorizing facts. The doubt resolution system provides instant access to teachers and knowledgeable peers through real-time chat, ensuring students never feel stuck or frustrated. Typing indicators show when help is on the way, reducing anxiety during challenging moments. Students can rate the helpfulness of responses, improving the quality of support over time. The platform tracks common questions and automatically suggests relevant resources before students even need to ask.
+
+G. ADAPTIVE DIFFICULTY AND PACING
+The system continuously monitors student performance to adjust content difficulty and pacing automatically. If a student consistently scores well, the platform introduces more challenging materials to prevent boredom and encourage growth. Conversely, if a student struggles with certain topics, the system provides additional practice opportunities and simpler explanations before moving forward. Students can manually adjust their difficulty preferences, but the AI provides gentle suggestions based on their demonstrated capabilities. The platform recognizes when students need breaks and suggests appropriate rest periods to prevent burnout while maintaining learning momentum.
+
+H. MOBILE-FIRST INTERACTION DESIGN
+Understanding that students access learning materials throughout their day, the platform employs a mobile-first design approach. The responsive interface works seamlessly across devices, allowing students to study during commutes, breaks, or any free moment. Touch-friendly controls make navigation intuitive on smartphones and tablets, while offline capabilities ensure students can continue learning even without internet access. Push notifications remind students about study goals, upcoming quizzes, or when friends are online for collaborative learning sessions. The interface adapts to different screen sizes, ensuring optimal usability whether students are using phones, tablets, or desktop computers.
+
+I. PROGRESS VISUALIZATION AND CELEBRATION
+Students interact with their learning data through beautiful, intuitive visualizations that make progress tangible and motivating. Interactive dashboards display current standings, recent achievements, and upcoming goals through colorful charts and graphs. Weekly and monthly progress reports highlight improvements, completed milestones, and areas for continued focus. Students can share their achievements on social media or within the platform community, celebrating their learning journey with friends and family. The system creates personalized "year in review" summaries that showcase student growth and accomplishments, reinforcing the value of their educational investment.
+
+9. CONCLUSION
+-------------
+EduQuestify represents a comprehensive educational platform that successfully combines modern web technologies with pedagogical best practices. The platform's strength lies in its:
+
+- **User-Centric Design**: Intuitive interfaces for both students and teachers
+- **AI Integration**: Leveraging Gemini API for intelligent content generation
+- **Comprehensive Analytics**: Detailed insights into learning patterns and progress
+- **Real-Time Collaboration**: Effective communication channels between users
+- **Gamification**: Engaging reward systems that motivate continued learning
+- **Scalability**: Robust architecture capable of handling growth
+- **Security**: Multi-layered security approach protecting user data
+
+The platform successfully addresses key educational challenges by providing tools for content creation, progress tracking, doubt resolution, and performance analytics. Its role-based approach ensures that both students and teachers have access to relevant features while maintaining security and privacy.
+
+Future enhancements could include:
+- Mobile application development
+- Advanced AI tutoring capabilities
+- Integration with external learning management systems
+- Enhanced reporting and analytics features
+- Multi-language support for broader accessibility
+- Virtual classroom integration
+- Advanced machine learning for personalized learning paths
+
+EduQuestify stands as a testament to how technology can enhance the educational experience, making learning more engaging, accessible, and effective for all stakeholders involved.

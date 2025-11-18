@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-time Dashboard Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ccc; border-radius: 5px; }
+        .log { background: #f5f5f5; padding: 10px; margin: 10px 0; border-radius: 3px; font-family: monospace; }
+        .success { background: #d4edda; border-color: #c3e6cb; }
+        .error { background: #f8d7da; border-color: #f5c6cb; }
+        button { padding: 10px 15px; margin: 5px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>Real-time Dashboard Test</h1>
+    
+    <div class="test-section">
+        <h2>Test Real-time Events</h2>
+        <p>This page tests the real-time dashboard functionality by simulating events.</p>
+        
+        <button onclick="testXPUpdate()">Test XP Update</button>
+        <button onclick="testQuizCompletion()">Test Quiz Completion</button>
+        <button onclick="testMasteryUpdate()">Test Mastery Update</button>
+        <button onclick="testRecommendationUpdate()">Test Recommendation Update</button>
+        <button onclick="clearLogs()">Clear Logs</button>
+    </div>
+    
+    <div class="test-section">
+        <h2>Event Logs</h2>
+        <div id="logs"></div>
+    </div>
+
+    <script>
+        // Import the realtimeBus (this would normally be done in your app)
+        // For testing purposes, we'll simulate the events
+        
+        function log(message, type = 'info') {
+            const logsDiv = document.getElementById('logs');
+            const logEntry = document.createElement('div');
+            logEntry.className = `log ${type}`;
+            logEntry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            logsDiv.insertBefore(logEntry, logsDiv.firstChild);
+        }
+        
+        function testXPUpdate() {
+            log('Testing XP Update event...', 'info');
+            
+            // Simulate XP update event
+            const xpData = {
+                userId: 'test-user',
+                xp: 1250,
+                level: 3,
+                xpToNext: 250,
+                xpEarned: 50
+            };
+            
+            log(`XP Update: +${xpData.xpEarned} XP (Total: ${xpData.xp}, Level: ${xpData.level})`, 'success');
+            log('XP progress bar should animate and show level up if applicable', 'info');
+        }
+        
+        function testQuizCompletion() {
+            log('Testing Quiz Completion event...', 'info');
+            
+            const quizData = {
+                userId: 'test-user',
+                quizData: {
+                    subject: 'Mathematics',
+                    topic: 'Algebra',
+                    difficulty: 'Medium',
+                    score: 8,
+                    totalQuestions: 10,
+                    percentage: 80,
+                    xpEarned: 16,
+                    completedAt: new Date().toISOString()
+                }
+            };
+            
+            log(`Quiz Completed: ${quizData.quizData.subject} - ${quizData.quizData.topic}`, 'success');
+            log(`Score: ${quizData.quizData.score}/${quizData.quizData.totalQuestions} (${quizData.quizData.percentage}%)`, 'success');
+            log('Activity feed should update with new quiz attempt', 'info');
+        }
+        
+        function testMasteryUpdate() {
+            log('Testing Mastery Update event...', 'info');
+            
+            const masteryData = {
+                userId: 'test-user',
+                subject: 'Science',
+                masteryLevel: 7,
+                averageScore: 75
+            };
+            
+            log(`Mastery Updated: ${masteryData.subject} - Level ${masteryData.masteryLevel} (${masteryData.averageScore}%)`, 'success');
+            log('Study deck mastery indicators should update', 'info');
+        }
+        
+        function testRecommendationUpdate() {
+            log('Testing Recommendation Update event...', 'info');
+            
+            const recommendationData = {
+                userId: 'test-user',
+                recommendations: [
+                    { subject: 'Mathematics', topic: 'Geometry', difficulty: 'Easy', reason: 'Weak area identified' },
+                    { subject: 'Science', topic: 'Physics', difficulty: 'Medium', reason: 'Progression available' }
+                ]
+            };
+            
+            log('Recommendations Updated:', 'success');
+            recommendationData.recommendations.forEach(rec => {
+                log(`- ${rec.subject}: ${rec.topic} (${rec.difficulty}) - ${rec.reason}`, 'info');
+            });
+            log('Recommended topics section should refresh', 'info');
+        }
+        
+        function clearLogs() {
+            document.getElementById('logs').innerHTML = '';
+            log('Logs cleared', 'info');
+        }
+        
+        // Initialize
+        log('Real-time Dashboard Test initialized', 'success');
+        log('Click the buttons above to simulate real-time events', 'info');
+        log('Open the browser console to see detailed event logs', 'info');
+    </script>
+</body>
+</html>

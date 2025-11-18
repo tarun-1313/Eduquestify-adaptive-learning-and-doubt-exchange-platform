@@ -1,0 +1,18 @@
+import { GeistSans } from "geist/font/sans"
+import { GeistMono } from "geist/font/mono"
+import { Analytics } from "@vercel/analytics/next"
+import { Suspense } from "react"
+import "../globals.css"
+
+export default function TeacherLayout({ children }) {
+  return (
+    <div className={`${GeistSans.variable} ${GeistMono.variable} antialiased bg-level-aura min-h-screen flex flex-col`}>
+      <main className="flex-1">
+        <Suspense fallback={null}>
+          {children}
+          <Analytics />
+        </Suspense>
+      </main>
+    </div>
+  )
+}

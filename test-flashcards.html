@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Flashcard Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .section { margin: 20px 0; padding: 15px; border: 1px solid #ccc; border-radius: 5px; }
+        button { margin: 5px; padding: 10px 15px; cursor: pointer; }
+        .result { margin: 10px 0; padding: 10px; background: #f0f0f0; border-radius: 3px; }
+        .error { background: #ffe0e0; color: #d00; }
+        .success { background: #e0ffe0; color: #080; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Flashcard System Test</h1>
+        
+        <div class="section">
+            <h2>Authentication</h2>
+            <button onclick="setAuthToken()">Set Auth Token</button>
+            <div id="auth-result" class="result"></div>
+        </div>
+        
+        <div class="section">
+            <h2>Dashboard</h2>
+            <button onclick="getDashboard()">Get Dashboard</button>
+            <div id="dashboard-result" class="result"></div>
+        </div>
+        
+        <div class="section">
+            <h2>Create Session</h2>
+            <button onclick="createSession()">Create Session</button>
+            <div id="session-result" class="result"></div>
+        </div>
+        
+        <div class="section">
+            <h2>Record Performance</h2>
+            <button onclick="recordPerformance()">Record Performance</button>
+            <div id="performance-result" class="result"></div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:3001/api/flashcards';
+        const AUTH_TOKEN = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTEsImVtYWlsIjoidGVzdEBleGFtcGxlLmNvbSIsIm5hbWUiOiJUZXN0IFVzZXIiLCJyb2xlIjoiU3R1ZGVudCIsImlhdCI6MTc2MTU3Mzc2MCwiZXhwIjoxNzYyMTc4NTYwfQ.qlma4dl129PdQltczysRnCye8RHE4jVX8L5vVu62Tnw';
+        
+        function setAuthToken() {
+            document.cookie = `auth-token=${AUTH_TOKEN}; path=/`;
+            document.getElementById('auth-result').innerHTML = '<div class="success">Auth token set in cookie</div>';
+        }
+        
+        async function makeRequest(url, method = 'GET', body = null) {
+            const options = {
+                method,
+                headers: {
+                    'Authorization': `Bearer ${AUTH_TOKEN}`,
+                    'Content-Type': 'application/json'
+                }
+            };
+            
+            if (body) {
+                options.body = JSON.stringify(body);
+            }
+            
+            try {
+                const response = await fetch(url, options);
+                const data = await response.json();
+                return { success: response.ok, data, status: response.status };
+            } catch (error) {
+                return { success: false, error: error.message };
+            }
+        }
+        
+        async function getDashboard() {
+            const result = await makeRequest(`${API_BASE}/dashboard`);
+            const resultDiv = document.getElementById('dashboard-result');
+            
+            if (result.success) {
+                resultDiv.innerHTML = `<div class="success">Dashboard loaded successfully!</div>
+                    <pre>${JSON.stringify(result.data, null, 2)}</pre>`;
+            } else {
+                resultDiv.innerHTML = `<div class="error">Error: ${result.error || 'Failed to load dashboard'}</div>`;
+            }
+        }
+        
+        async function createSession() {
+            const sessionData = {
+                subject: 'Mathematics',
+                topic: 'Algebra',
+                totalFlashcards: 10,
+                difficulty: 'Medium'
+            };
+            
+            const result = await makeRequest(`${API_BASE}/session`, 'POST', sessionData);
+            const resultDiv = document.getElementById('session-result');
+            
+            if (result.success) {
+                resultDiv.innerHTML = `<div class="success">Session created successfully!</div>
+                    <pre>${JSON.stringify(result.data, null, 2)}</pre>`;
+            } else {
+                resultDiv.innerHTML = `<div class="error">Error: ${result.error || 'Failed to create session'}</div>`;
+            }
+        }
+        
+        async function recordPerformance() {
+            const performanceData = {
+                sessionId: 1,
+                flashcardId: 1,
+                isCorrect: true,
+                responseTime: 5,
+                subject: 'Mathematics',
+                topic: 'Algebra'
+            };
+            
+            const result = await makeRequest(`${API_BASE}/performance`, 'POST', performanceData);
+            const resultDiv = document.getElementById('performance-result');
+            
+            if (result.success) {
+                resultDiv.innerHTML = `<div class="success">Performance recorded successfully!</div>
+                    <pre>${JSON.stringify(result.data, null, 2)}</pre>`;
+            } else {
+                resultDiv.innerHTML = `<div class="error">Error: ${result.error || 'Failed to record performance'}</div>`;
+            }
+        }
+        
+        // Auto-set auth token on page load
+        setAuthToken();
+    </script>
+</body>
+</html>

@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Viewer Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 5px;
+        }
+        button {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            background: #007bff;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        .page-info {
+            padding: 8px 16px;
+            background: #e9ecef;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        .pdf-container {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            overflow: auto;
+            background: white;
+            min-height: 400px;
+        }
+        .error {
+            color: red;
+            padding: 10px;
+            background: #ffe6e6;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+        .success {
+            color: green;
+            padding: 10px;
+            background: #e6ffe6;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>PDF Viewer Test</h1>
+        <p>This page tests the PDF viewer functionality without requiring authentication or database access.</p>
+        
+        <div class="controls">
+            <button id="prevPage" disabled>Previous Page</button>
+            <button id="nextPage" disabled>Next Page</button>
+            <button id="zoomOut" disabled>Zoom Out</button>
+            <button id="zoomIn" disabled>Zoom In</button>
+            <button id="autoScroll" disabled>Start Auto-Scroll</button>
+            <div class="page-info">
+                <span id="pageInfo">Page: 0 / 0</span>
+            </div>
+        </div>
+        
+        <div id="status"></div>
+        <div id="pdfContainer" class="pdf-container">
+            <p style="text-align: center; padding: 50px; color: #666;">
+                PDF will be displayed here when a sample PDF is loaded
+            </p>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
+    <script>
+        // Test PDF viewer functionality
+        class PDFViewer {
+            constructor() {
+                this.pdfDoc = null;
+                this.currentPage = 1;
+                this.totalPages = 0;
+                this.scale = 1.0;
+                this.autoScrollInterval = null;
+                
+                this.initializeElements();
+                this.setupEventListeners();
+                this.testPDFLoading();
+            }
+            
+            initializeElements() {
+                this.prevBtn = document.getElementById('prevPage');
+                this.nextBtn = document.getElementById('nextPage');
+                this.zoomOutBtn = document.getElementById('zoomOut');
+                this.zoomInBtn = document.getElementById('zoomIn');
+                this.autoScrollBtn = document.getElementById('autoScroll');
+                this.pageInfo = document.getElementById('pageInfo');
+                this.pdfContainer = document.getElementById('pdfContainer');
+                this.status = document.getElementById('status');
+            }
+            
+            setupEventListeners() {
+                this.prevBtn.addEventListener('click', () => this.goToPrevPage());
+                this.nextBtn.addEventListener('click', () => this.goToNextPage());
+                this.zoomOutBtn.addEventListener('click', () => this.zoomOut());
+                this.zoomInBtn.addEventListener('click', () => this.zoomIn());
+                this.autoScrollBtn.addEventListener('click', () => this.toggleAutoScroll());
+            }
+            
+            async testPDFLoading() {
+                try {
+                    // Set up PDF.js worker
+                    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
+                    
+                    // Create a simple test PDF using a data URL (this is a minimal PDF)
+                    const testPdfData = atob(`
+                        JVBERi0xLjQKJcOkw7zDtsO8CjIgMCBvYmoKPDwKL0xlbmd0aCAzIDAgUgo+PgpzdHJlYW0K
+                        SGVsbG8gV29ybGQhCmVuZHN0cmVhbQplbmRvYmoKCjMgMCBvYmoKNQplbmRvYmoKCjQgMCBvYmoK
+                        PDwKL1R5cGUgL1BhZ2UKL1BhcmVudCA1IDAgUgovQ29udGVudHMgMiAwIFIKPj4KZW5kb2Jq
+                        Cgo1IDAgb2JqCjw8Ci9UeXBlIC9QYWdlcwovS2lkcyBbNCAwIFJdCi9Db3VudCAxCj4+CmVu
+                        ZG9iagoKeHJlZgowIDYKMDAwMDAwMDAwMCA2NTUzNSBmIAowMDAwMDAwMDA5IDAwMDAwIG4g
+                        CjAwMDAwMDAwNTggMDAwMDAgbiAKMDAwMDAwMDExNCAwMDAwMCBuIAowMDAwMDAwMTM3IDAw
+                        MDAwIG4gCjAwMDAwMDAyMTggMDAwMDAgbiAKdHJhaWxlcgo8PAovU2l6ZSA2Ci9Sb290IDUg
+                        MCBSCj4+CnN0YXJ0eHJlZgoyOTcKJSVFT0YK
+                    `.replace(/\s/g, ''));
+                    
+                    // Load the PDF
+                    const loadingTask = pdfjsLib.getDocument({ data: testPdfData });
+                    this.pdfDoc = await loadingTask.promise;
+                    this.totalPages = this.pdfDoc.numPages;
+                    this.currentPage = 1;
+                    
+                    this.updateUI();
+                    this.renderPage(this.currentPage);
+                    
+                    this.showStatus('PDF loaded successfully!', 'success');
+                    
+                } catch (error) {
+                    console.error('Error loading PDF:', error);
+                    this.showStatus(`Error loading PDF: ${error.message}`, 'error');
+                }
+            }
+            
+            async renderPage(pageNum) {
+                try {
+                    const page = await this.pdfDoc.getPage(pageNum);
+                    const viewport = page.getViewport({ scale: this.scale });
+                    
+                    // Create canvas
+                    const canvas = document.createElement('canvas');
+                    const context = canvas.getContext('2d');
+                    canvas.height = viewport.height;
+                    canvas.width = viewport.width;
+                    
+                    // Clear container and add canvas
+                    this.pdfContainer.innerHTML = '';
+                    this.pdfContainer.appendChild(canvas);
+                    
+                    // Render PDF page
+                    const renderContext = {
+                        canvasContext: context,
+                        viewport: viewport
+                    };
+                    
+                    await page.render(renderContext).promise;
+                    
+                } catch (error) {
+                    console.error('Error rendering page:', error);
+                    this.showStatus(`Error rendering page: ${error.message}`, 'error');
+                }
+            }
+            
+            updateUI() {
+                this.pageInfo.textContent = `Page: ${this.currentPage} / ${this.totalPages}`;
+                this.prevBtn.disabled = this.currentPage <= 1;
+                this.nextBtn.disabled = this.currentPage >= this.totalPages;
+                this.zoomOutBtn.disabled = this.scale <= 0.5;
+                this.zoomInBtn.disabled = this.scale >= 2.0;
+                this.autoScrollBtn.disabled = this.totalPages === 0;
+            }
+            
+            goToPrevPage() {
+                if (this.currentPage > 1) {
+                    this.currentPage--;
+                    this.updateUI();
+                    this.renderPage(this.currentPage);
+                }
+            }
+            
+            goToNextPage() {
+                if (this.currentPage < this.totalPages) {
+                    this.currentPage++;
+                    this.updatePage();
+                }
+            }
+            
+            updatePage() {
+                this.updateUI();
+                this.renderPage(this.currentPage);
+            }
+            
+            zoomIn() {
+                if (this.scale < 2.0) {
+                    this.scale += 0.25;
+                    this.updateUI();
+                    this.renderPage(this.currentPage);
+                }
+            }
+            
+            zoomOut() {
+                if (this.scale > 0.5) {
+                    this.scale -= 0.25;
+                    this.updateUI();
+                    this.renderPage(this.currentPage);
+                }
+            }
+            
+            toggleAutoScroll() {
+                if (this.autoScrollInterval) {
+                    this.stopAutoScroll();
+                } else {
+                    this.startAutoScroll();
+                }
+            }
+            
+            startAutoScroll() {
+                this.autoScrollBtn.textContent = 'Stop Auto-Scroll';
+                this.autoScrollInterval = setInterval(() => {
+                    if (this.currentPage < this.totalPages) {
+                        this.goToNextPage();
+                    } else {
+                        this.stopAutoScroll();
+                        this.showStatus('Auto-scroll completed!', 'success');
+                    }
+                }, 3000); // Change page every 3 seconds
+            }
+            
+            stopAutoScroll() {
+                if (this.autoScrollInterval) {
+                    clearInterval(this.autoScrollInterval);
+                    this.autoScrollInterval = null;
+                    this.autoScrollBtn.textContent = 'Start Auto-Scroll';
+                }
+            }
+            
+            showStatus(message, type) {
+                this.status.innerHTML = `<div class="${type}">${message}</div>`;
+                setTimeout(() => {
+                    this.status.innerHTML = '';
+                }, 5000);
+            }
+        }
+        
+        // Initialize the PDF viewer when the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            new PDFViewer();
+        });
+    </script>
+</body>
+</html>

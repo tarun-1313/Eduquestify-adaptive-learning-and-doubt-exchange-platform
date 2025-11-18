@@ -1,0 +1,58 @@
+.liquid-ether-container {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+}
+
+/* Make sure the canvas fills the container */
+.liquid-ether-container canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* For fixed background usage */
+.liquid-ether-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: -1;
+  overflow: hidden;
+}
+
+/* Optional overlay to adjust contrast with content */
+.liquid-ether-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.05);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Animation for the background color shift */
+@keyframes colorShift {
+  0% {
+    background-color: rgba(30, 60, 114, 0.02);
+  }
+  50% {
+    background-color: rgba(70, 40, 120, 0.04);
+  }
+  100% {
+    background-color: rgba(30, 60, 114, 0.02);
+  }
+}
+
+/* Apply subtle color shift animation to container */
+.liquid-ether-container.with-color-shift {
+  animation: colorShift 20s infinite ease-in-out;
+}

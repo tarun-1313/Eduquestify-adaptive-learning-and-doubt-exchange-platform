@@ -1,0 +1,101 @@
+.document-uploader {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.drop-zone {
+  border: 2px dashed #6c63ff;
+  border-radius: 8px;
+  padding: 2.5rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background-color: #f8f9fa;
+  margin-bottom: 2rem;
+}
+
+.drop-zone:hover, .drop-zone.drag-active {
+  background-color: #f0f0ff;
+  border-color: #4a45b1;
+}
+
+.upload-icon {
+  color: #6c63ff;
+  margin-bottom: 1rem;
+}
+
+.drop-zone h3 {
+  color: #333;
+  margin: 0.5rem 0;
+  font-size: 1.25rem;
+}
+
+.drop-zone p {
+  color: #666;
+  margin: 0.25rem 0 0;
+  font-size: 0.9rem;
+}
+
+.paste-section {
+  margin-top: 2rem;
+}
+
+.paste-section h4 {
+  color: #444;
+  margin-bottom: 0.75rem;
+  font-size: 1.1rem;
+}
+
+.text-input {
+  width: 100%;
+  padding: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 1rem;
+  line-height: 1.5;
+  resize: vertical;
+  min-height: 150px;
+  transition: border-color 0.3s ease;
+}
+
+.text-input:focus {
+  outline: none;
+  border-color: #6c63ff;
+  box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.2);
+}
+
+.processing-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1rem;
+  color: #666;
+}
+
+.spinner {
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(108, 99, 255, 0.2);
+  border-radius: 50%;
+  border-top-color: #6c63ff;
+  animation: spin 1s ease-in-out infinite;
+  margin-right: 0.5rem;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .document-uploader {
+    padding: 1rem;
+  }
+  
+  .drop-zone {
+    padding: 1.5rem 1rem;
+  }
+}

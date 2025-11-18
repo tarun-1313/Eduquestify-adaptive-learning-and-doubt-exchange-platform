@@ -1,0 +1,167 @@
+.document-processor {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 2rem;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.tabs {
+  display: flex;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.tab {
+  padding: 0.75rem 1.5rem;
+  background: none;
+  border: none;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #666;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.tab:hover {
+  color: #4a45b1;
+}
+
+.tab.active {
+  color: #6c63ff;
+  font-weight: 600;
+}
+
+.tab.active::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background-color: #6c63ff;
+  border-radius: 3px 3px 0 0;
+}
+
+.tab:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.tab-content {
+  min-height: 400px;
+}
+
+.actions-section {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.5rem;
+}
+
+.action-btn {
+  padding: 0.75rem 1.5rem;
+  background-color: #6c63ff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.action-btn:hover {
+  background-color: #5a52d4;
+  transform: translateY(-1px);
+}
+
+.action-btn:disabled {
+  background-color: #b3b0ff;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.processing-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 1.5rem;
+  background-color: #f8f9ff;
+  border-radius: 8px;
+  margin: 1rem 0;
+}
+
+.spinner {
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(108, 99, 255, 0.2);
+  border-radius: 50%;
+  border-top-color: #6c63ff;
+  animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.result-container {
+  margin-top: 1.5rem;
+  padding: 1.5rem;
+  background-color: #f8f9ff;
+  border-radius: 8px;
+  border-left: 4px solid #6c63ff;
+}
+
+.result-container h3 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  color: #333;
+  font-size: 1.25rem;
+}
+
+.result-content {
+  line-height: 1.6;
+  color: #444;
+}
+
+.result-content p {
+  margin: 0.5rem 0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .document-processor {
+    padding: 1rem;
+  }
+  
+  .action-buttons {
+    flex-direction: column;
+  }
+  
+  .action-btn {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .tabs {
+    justify-content: space-between;
+  }
+  
+  .tab {
+    padding: 0.75rem 0.5rem;
+    font-size: 0.9rem;
+  }
+}

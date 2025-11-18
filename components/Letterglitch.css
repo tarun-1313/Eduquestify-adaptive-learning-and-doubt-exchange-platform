@@ -1,0 +1,63 @@
+/* LetterGlitch Background Styles */
+.letter-glitch-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -2;
+  opacity: 0.3;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.letter-glitch-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Study page with LetterGlitch background */
+.study-page-with-glitch {
+  position: relative;
+  min-height: 100vh;
+  width: 100vw;
+  overflow-x: hidden;
+}
+
+.study-content {
+  position: relative;
+  z-index: 1;
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(8px);
+  border-radius: 12px;
+  margin: 20px auto;
+  padding: 24px;
+  max-width: 1400px;
+  border: 1px solid rgba(148, 163, 184, 0.15);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+/* Ensure full coverage */
+.study-page-with-glitch::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  z-index: -3;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .study-content {
+    margin: 10px;
+    padding: 16px;
+  }
+  
+  .letter-glitch-container {
+    opacity: 0.2;
+  }
+}

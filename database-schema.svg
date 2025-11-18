@@ -1,0 +1,249 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2200" height="1400" viewBox="0 0 2200 1400">
+  <defs>
+    <style>
+      .cluster-title{font: bold 20px Arial; fill:#222}
+      .table-title{font: bold 16px Arial; fill:#fff}
+      .field{font: 14px Arial; fill:#222}
+      .small{font: 12px Arial; fill:#444}
+    </style>
+    <marker id="arrow" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#444"/>
+    </marker>
+  </defs>
+
+  <rect x="20" y="20" width="1000" height="600" rx="10" fill="#fdebd0" stroke="#f5cba7"/>
+  <text x="40" y="50" class="cluster-title">Users & Notes</text>
+
+  <rect x="40" y="80" width="260" height="170" rx="8" fill="#f39c12" stroke="#d68910"/>
+  <text x="55" y="105" class="table-title">users</text>
+  <text x="55" y="130" class="field">id [PK] INT</text>
+  <text x="55" y="150" class="field">username VARCHAR(50)</text>
+  <text x="55" y="170" class="field">email VARCHAR(100)</text>
+  <text x="55" y="190" class="field">password_hash VARCHAR(255)</text>
+  <text x="55" y="210" class="field">full_name VARCHAR(100)</text>
+  <text x="55" y="230" class="field">created_at TIMESTAMP</text>
+  <text x="55" y="250" class="field">updated_at TIMESTAMP</text>
+
+  <rect x="330" y="80" width="280" height="190" rx="8" fill="#e67e22" stroke="#ca6f1e"/>
+  <text x="345" y="105" class="table-title">notes</text>
+  <text x="345" y="130" class="field">note_id [PK] INT</text>
+  <text x="345" y="150" class="field">user_id [FK] INT → users.id</text>
+  <text x="345" y="170" class="field">title VARCHAR(100)</text>
+  <text x="345" y="190" class="field">content TEXT</text>
+  <text x="345" y="210" class="field">created_at TIMESTAMP</text>
+  <text x="345" y="230" class="field">updated_at TIMESTAMP</text>
+
+  <rect x="640" y="80" width="340" height="250" rx="8" fill="#e67e22" stroke="#ca6f1e"/>
+  <text x="655" y="105" class="table-title">note_relations</text>
+  <text x="655" y="130" class="field">note_comments: comment_id [PK], note_id [FK], user_id [FK], comment_text, created_at</text>
+  <text x="655" y="150" class="field">note_likes: like_id [PK], note_id [FK], user_id [FK], liked_at</text>
+  <text x="655" y="170" class="field">note_ratings: rating_id [PK], note_id [FK], user_id [FK], rating, created_at</text>
+  <text x="655" y="190" class="field">note_views: view_id [PK], note_id [FK], user_id [FK], viewed_at</text>
+  <text x="655" y="210" class="field">note_tags: note_id [FK], tag_id [FK]</text>
+  <text x="655" y="230" class="field">shared_notes: share_id [PK], note_id [FK], shared_by_user_id [FK], shared_with_user_id [FK], shared_at</text>
+  <text x="655" y="250" class="field">user_starred_notes: star_id [PK], user_id [FK], note_id [FK], starred_at</text>
+
+  <rect x="40" y="280" width="260" height="120" rx="8" fill="#f39c12" stroke="#d68910"/>
+  <text x="55" y="305" class="table-title">tags</text>
+  <text x="55" y="330" class="field">tag_id [PK] INT</text>
+  <text x="55" y="350" class="field">name VARCHAR(50)</text>
+
+  <rect x="330" y="290" width="280" height="120" rx="8" fill="#e67e22" stroke="#ca6f1e"/>
+  <text x="345" y="315" class="table-title">favorites</text>
+  <text x="345" y="340" class="field">id [PK] INT</text>
+  <text x="345" y="360" class="field">user_id [FK] INT → users.id</text>
+  <text x="345" y="380" class="field">item_type VARCHAR(50), item_id INT</text>
+
+  <rect x="40" y="430" width="260" height="140" rx="8" fill="#f39c12" stroke="#d68910"/>
+  <text x="55" y="455" class="table-title">notifications</text>
+  <text x="55" y="480" class="field">id [PK] INT</text>
+  <text x="55" y="500" class="field">user_id [FK] INT → users.id</text>
+  <text x="55" y="520" class="field">type VARCHAR(50), message TEXT</text>
+  <text x="55" y="540" class="field">is_read BOOLEAN, created_at TIMESTAMP</text>
+
+  <rect x="330" y="430" width="280" height="140" rx="8" fill="#e67e22" stroke="#ca6f1e"/>
+  <text x="345" y="455" class="table-title">note_metrics</text>
+  <text x="345" y="480" class="field">comments, likes, ratings, views linked to notes</text>
+  <text x="345" y="500" class="small">enforced via FKs and unique constraints</text>
+
+  <line x1="470" y1="170" x2="300" y2="170" stroke="#444" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="780" y1="150" x2="470" y2="150" stroke="#444" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="780" y1="170" x2="610" y2="170" stroke="#444" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="780" y1="190" x2="610" y2="190" stroke="#444" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="780" y1="210" x2="610" y2="210" stroke="#444" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="640" y1="330" x2="300" y2="330" stroke="#444" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="330" y1="350" x2="300" y2="210" stroke="#444" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <rect x="1060" y="20" width="520" height="380" rx="10" fill="#d6eaf8" stroke="#aed6f1"/>
+  <text x="1080" y="50" class="cluster-title">Doubts</text>
+
+  <rect x="1080" y="80" width="260" height="170" rx="8" fill="#3498db" stroke="#2e86c1"/>
+  <text x="1095" y="105" class="table-title">doubts</text>
+  <text x="1095" y="130" class="field">id [PK] INT</text>
+  <text x="1095" y="150" class="field">user_id [FK] INT → users.id</text>
+  <text x="1095" y="170" class="field">title VARCHAR(255), content TEXT</text>
+  <text x="1095" y="190" class="field">created_at TIMESTAMP, status ENUM</text>
+
+  <rect x="1360" y="80" width="200" height="150" rx="8" fill="#5dade2" stroke="#2e86c1"/>
+  <text x="1375" y="105" class="table-title">doubt_messages</text>
+  <text x="1375" y="130" class="field">id [PK] INT</text>
+  <text x="1375" y="150" class="field">doubt_id [FK] → doubts.id</text>
+  <text x="1375" y="170" class="field">user_id [FK] → users.id</text>
+  <text x="1375" y="190" class="field">message TEXT, created_at</text>
+
+  <line x1="1360" y1="150" x2="1340" y2="150" stroke="#444" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="1360" y1="170" x2="980" y2="170" stroke="#444" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <rect x="1620" y="20" width="560" height="380" rx="10" fill="#e8f8f5" stroke="#abebc6"/>
+  <text x="1640" y="50" class="cluster-title">Question Banks</text>
+
+  <rect x="1640" y="80" width="240" height="170" rx="8" fill="#1abc9c" stroke="#17a589"/>
+  <text x="1655" y="105" class="table-title">question_bank</text>
+  <text x="1655" y="130" class="field">id [PK] INT</text>
+  <text x="1655" y="150" class="field">user_id [FK] → users.id</text>
+  <text x="1655" y="170" class="field">title VARCHAR(100), subject VARCHAR(50)</text>
+  <text x="1655" y="190" class="field">created_at, updated_at TIMESTAMP</text>
+
+  <rect x="1900" y="80" width="260" height="150" rx="8" fill="#48c9b0" stroke="#17a589"/>
+  <text x="1915" y="105" class="table-title">question_bank_downloads</text>
+  <text x="1915" y="130" class="field">download_id [PK] INT</text>
+  <text x="1915" y="150" class="field">user_id [FK] → users.id</text>
+  <text x="1915" y="170" class="field">bank_id [FK] → question_bank.id</text>
+  <text x="1915" y="190" class="field">downloaded_at TIMESTAMP</text>
+
+  <line x1="1900" y1="170" x2="1880" y2="170" stroke="#444" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="1900" y1="150" x2="980" y2="200" stroke="#444" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <rect x="20" y="640" width="1000" height="740" rx="10" fill="#eaf2f8" stroke="#d4e6f1"/>
+  <text x="40" y="670" class="cluster-title">Subjects & Analytics</text>
+
+  <rect x="40" y="700" width="260" height="120" rx="8" fill="#5d6d7e" stroke="#566573"/>
+  <text x="55" y="725" class="table-title">subjects</text>
+  <text x="55" y="750" class="field">subject_id [PK] INT</text>
+  <text x="55" y="770" class="field">name VARCHAR(100), created_at TIMESTAMP</text>
+
+  <rect x="330" y="700" width="300" height="150" rx="8" fill="#85929e" stroke="#717d7e"/>
+  <text x="345" y="725" class="table-title">subject_mastery</text>
+  <text x="345" y="750" class="field">mastery_id [PK] INT</text>
+  <text x="345" y="770" class="field">user_id [FK] → users.id</text>
+  <text x="345" y="790" class="field">subject_id [FK] → subjects.subject_id</text>
+  <text x="345" y="810" class="field">mastery_level DECIMAL(5,2), last_updated</text>
+
+  <line x1="330" y1="770" x2="300" y2="210" stroke="#444" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="330" y1="790" x2="300" y2="740" stroke="#444" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <rect x="40" y="850" width="300" height="140" rx="8" fill="#5d6d7e" stroke="#566573"/>
+  <text x="55" y="875" class="table-title">user_progress</text>
+  <text x="55" y="900" class="field">progress_id [PK] INT</text>
+  <text x="55" y="920" class="field">user_id [FK] → users.id</text>
+  <text x="55" y="940" class="field">course_id INT, progress_percentage DECIMAL(5,2)</text>
+  <text x="55" y="960" class="field">last_updated TIMESTAMP</text>
+
+  <rect x="370" y="850" width="260" height="130" rx="8" fill="#85929e" stroke="#717d7e"/>
+  <text x="385" y="875" class="table-title">quiz_attempts</text>
+  <text x="385" y="900" class="field">attempt_id [PK] INT</text>
+  <text x="385" y="920" class="field">user_id [FK] → users.id</text>
+  <text x="385" y="940" class="field">quiz_id INT, score DECIMAL(5,2)</text>
+  <text x="385" y="960" class="field">started_at, completed_at TIMESTAMP</text>
+
+  <line x1="370" y1="920" x2="300" y2="210" stroke="#444" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="40" y1="920" x2="300" y2="210" stroke="#444" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <rect x="650" y="700" width="370" height="260" rx="10" fill="#d6dbdf" stroke="#b2babb"/>
+  <text x="670" y="730" class="cluster-title">Flashcards</text>
+
+  <rect x="670" y="760" width="260" height="120" rx="8" fill="#2ecc71" stroke="#28b463"/>
+  <text x="685" y="785" class="table-title">flashcard_subjects</text>
+  <text x="685" y="810" class="field">subject_id [PK] INT</text>
+  <text x="685" y="830" class="field">name VARCHAR(100), created_at</text>
+
+  <rect x="940" y="760" width="260" height="160" rx="8" fill="#58d68d" stroke="#28b463"/>
+  <text x="955" y="785" class="table-title">flashcard_sessions</text>
+  <text x="955" y="810" class="field">session_id [PK] INT</text>
+  <text x="955" y="830" class="field">user_id [FK] → users.id</text>
+  <text x="955" y="850" class="field">subject_id [FK] → flashcard_subjects.subject_id</text>
+  <text x="955" y="870" class="field">created_at, updated_at, status</text>
+
+  <rect x="670" y="900" width="260" height="140" rx="8" fill="#2ecc71" stroke="#28b463"/>
+  <text x="685" y="925" class="table-title">flashcard_mastery</text>
+  <text x="685" y="950" class="field">mastery_id [PK] INT</text>
+  <text x="685" y="970" class="field">user_id [FK] → users.id</text>
+  <text x="685" y="990" class="field">subject_id [FK] → flashcard_subjects.subject_id</text>
+  <text x="685" y="1010" class="field">mastery_level DECIMAL(5,2), last_reviewed_at</text>
+
+  <rect x="940" y="940" width="260" height="120" rx="8" fill="#58d68d" stroke="#28b463"/>
+  <text x="955" y="965" class="table-title">flashcard_performance</text>
+  <text x="955" y="990" class="field">performance_id [PK] INT</text>
+  <text x="955" y="1010" class="field">session_id [FK] → flashcard_sessions.session_id</text>
+  <text x="955" y="1030" class="field">flashcard_id INT, score INT, timestamp</text>
+
+  <line x1="940" y1="830" x2="300" y2="210" stroke="#444" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="670" y1="970" x2="300" y2="210" stroke="#444" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="940" y1="1010" x2="1200" y2="1010" stroke="#444" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <rect x="1060" y="420" width="1120" height="960" rx="10" fill="#fcf3cf" stroke="#f9e79f"/>
+  <text x="1080" y="450" class="cluster-title">Additional Links</text>
+
+  <rect x="1080" y="490" width="260" height="140" rx="8" fill="#f4d03f" stroke="#d4ac0d"/>
+  <text x="1095" y="515" class="table-title">shared_notes</text>
+  <text x="1095" y="540" class="field">share_id [PK] INT</text>
+  <text x="1095" y="560" class="field">note_id [FK] → notes.note_id</text>
+  <text x="1095" y="580" class="field">shared_by_user_id [FK] → users.id</text>
+  <text x="1095" y="600" class="field">shared_with_user_id [FK] → users.id</text>
+
+  <rect x="1360" y="490" width="260" height="120" rx="8" fill="#f4d03f" stroke="#d4ac0d"/>
+  <text x="1375" y="515" class="table-title">user_starred_notes</text>
+  <text x="1375" y="540" class="field">star_id [PK] INT</text>
+  <text x="1375" y="560" class="field">user_id [FK] → users.id</text>
+  <text x="1375" y="580" class="field">note_id [FK] → notes.note_id</text>
+
+  <rect x="1640" y="490" width="260" height="130" rx="8" fill="#f4d03f" stroke="#d4ac0d"/>
+  <text x="1655" y="515" class="table-title">note_comments</text>
+  <text x="1655" y="540" class="field">comment_id [PK] INT</text>
+  <text x="1655" y="560" class="field">note_id [FK] → notes.note_id</text>
+  <text x="1655" y="580" class="field">user_id [FK] → users.id</text>
+
+  <rect x="1920" y="490" width="240" height="130" rx="8" fill="#f4d03f" stroke="#d4ac0d"/>
+  <text x="1935" y="515" class="table-title">note_likes</text>
+  <text x="1935" y="540" class="field">like_id [PK] INT</text>
+  <text x="1935" y="560" class="field">note_id [FK] → notes.note_id</text>
+  <text x="1935" y="580" class="field">user_id [FK] → users.id</text>
+
+  <rect x="1080" y="650" width="240" height="130" rx="8" fill="#f4d03f" stroke="#d4ac0d"/>
+  <text x="1095" y="675" class="table-title">note_ratings</text>
+  <text x="1095" y="700" class="field">rating_id [PK] INT</text>
+  <text x="1095" y="720" class="field">note_id [FK] → notes.note_id</text>
+  <text x="1095" y="740" class="field">user_id [FK] → users.id</text>
+
+  <rect x="1340" y="650" width="260" height="130" rx="8" fill="#f4d03f" stroke="#d4ac0d"/>
+  <text x="1355" y="675" class="table-title">note_views</text>
+  <text x="1355" y="700" class="field">view_id [PK] INT</text>
+  <text x="1355" y="720" class="field">note_id [FK] → notes.note_id</text>
+  <text x="1355" y="740" class="field">user_id [FK] → users.id</text>
+
+  <rect x="1620" y="650" width="240" height="120" rx="8" fill="#f4d03f" stroke="#d4ac0d"/>
+  <text x="1635" y="675" class="table-title">note_tags</text>
+  <text x="1635" y="700" class="field">note_id [FK] → notes.note_id</text>
+  <text x="1635" y="720" class="field">tag_id [FK] → tags.tag_id</text>
+
+  <line x1="1640" y1="720" x2="1560" y2="740" stroke="#444" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="1620" y1="700" x2="620" y2="210" stroke="#444" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="1920" y1="560" x2="620" y2="190" stroke="#444" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="1640" y1="560" x2="620" y2="170" stroke="#444" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="1360" y1="580" x2="620" y2="230" stroke="#444" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="1340" y1="720" x2="620" y2="220" stroke="#444" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="1080" y1="720" x2="620" y2="200" stroke="#444" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="1360" y1="560" x2="300" y2="210" stroke="#444" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="1920" y1="580" x2="300" y2="210" stroke="#444" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="1080" y1="600" x2="300" y2="210" stroke="#444" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <rect x="1620" y="820" width="240" height="140" rx="8" fill="#f7dc6f" stroke="#f4d03f"/>
+  <text x="1635" y="845" class="table-title">notifications</text>
+  <text x="1635" y="870" class="field">id [PK] INT</text>
+  <text x="1635" y="890" class="field">user_id [FK] → users.id</text>
+  <text x="1635" y="910" class="field">type, message, is_read, created_at</text>
+
+  <line x1="1620" y1="890" x2="300" y2="210" stroke="#444" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <text x="40" y="1370" class="small">Arrow points from child FK to parent PK</text>
+</svg>

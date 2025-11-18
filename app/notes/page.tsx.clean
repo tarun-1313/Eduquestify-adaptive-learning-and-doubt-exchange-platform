@@ -1,0 +1,376 @@
+"use client"
+
+import { useState, useEffect, useCallback } from "react"
+import { useSession } from "next-auth/react"
+import { Button } from "@/components/ui/button"
+import { Card } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Badge } from "@/components/ui/badge"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { FileText, Search, Star, Clock, Eye, MessageCircle, ThumbsUp, Plus, Download } from "lucide-react"
+import UploadModal from "./components/UploadModal"
+import { formatDistanceToNow } from "date-fns"
+import { useToast } from "@/components/ui/use-toast"
+
+// Types
+type Note = {
+  id: number
+  user_id: number
+  title: string
+  description: string
+  subject: string
+  file_path: string
+  original_filename: string
+  file_mime_type: string
+  file_size_bytes: number
+  views_count: number
+  likes_count: number
+  comments_count: number
+  created_at: string
+  updated_at: string
+  user?: {
+    name: string
+    email: string
+    image: string
+  }
+}
+
+type SubjectCount = {
+  subject: string
+  count: number
+}
+
+export default function NotesPage() {
+  const { data: session } = useSession()
+  const { toast } = useToast()
+  const [isUploadModalOpen, setIsUploadModalOpen] = useState(false)
+  const [notes, setNotes] = useState<Note[]>([])
+  const [filteredNotes, setFilteredNotes] = useState<Note[]>([])
+  const [subjectCounts, setSubjectCounts] = useState<SubjectCount[]>([])
+  const [searchQuery, setSearchQuery] = useState("")
+  const [selectedSubject, setSelectedSubject] = useState<string | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
+
+  // Fetch notes and subject counts
+  const fetchNotes = useCallback(async () => {
+    try {
+      setIsLoading(true)
+      console.log('Fetching notes...')
+      
+      const notesResponse = await fetch('/api/notes')
+      console.log('Notes response status:', notesResponse.status)
+      
+      if (!notesResponse.ok) {
+        throw new Error(`Failed to fetch notes: ${notesResponse.statusText}`)
+      }
+      
+      const notesData = await notesResponse.json()
+      console.log('Notes data:', notesData)
+      
+      if (notesData.data) {
+        console.log(`Found ${notesData.data.length} notes`)
+        setNotes(notesData.data)
+        setFilteredNotes(notesData.data)
+        
+        // Extract unique subjects from notes
+        const uniqueSubjects = new Map<string, number>()
+        notesData.data.forEach((note: Note) => {
+          if (note.subject) {
+            const count = uniqueSubjects.get(note.subject) || 0
+            uniqueSubjects.set(note.subject, count + 1)
+          }
+        })
+        
+        const subjects = Array.from(uniqueSubjects.entries()).map(([name, count]) => ({
+          subject: name,
+          count
+        }))
+        
+        console.log('Extracted subjects:', subjects)
+        setSubjectCounts(subjects)
+      }
+    } catch (error) {
+      console.error('Error in fetchNotes:', error)
+      toast({
+        title: "Error",
+        description: error instanceof Error ? error.message : "Failed to load notes",
+        variant: "destructive",
+      })
+    } finally {
+      setIsLoading(false)
+    }
+  }, [toast])
+
+  // Filter notes based on search query and selected subject
+  useEffect(() => {
+    let result = [...notes]
+    
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase()
+      result = result.filter(note => 
+        (note.title?.toLowerCase().includes(query) || false) ||
+        (note.description?.toLowerCase().includes(query) || false) ||
+        (note.subject?.toLowerCase().includes(query) || false)
+      )
+    }
+    
+    if (selectedSubject) {
+      result = result.filter(note => note.subject === selectedSubject)
+    }
+    
+    // Sort by most recent first
+    result.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+    
+    setFilteredNotes(result)
+  }, [searchQuery, selectedSubject, notes])
+
+  // Initial data fetch
+  useEffect(() => {
+    console.log('Component mounted, fetching notes...')
+    fetchNotes()
+    
+    // Set up a timer to refresh notes every 30 seconds
+    const refreshInterval = setInterval(fetchNotes, 30000)
+    
+    // Clean up interval on unmount
+    return () => clearInterval(refreshInterval)
+  }, [fetchNotes])
+
+  // Format file size
+  const formatFileSize = (bytes: number): string => {
+    if (bytes === 0) return '0 Bytes'
+    const k = 1024
+    const sizes = ['Bytes', 'KB', 'MB', 'GB']
+    const i = Math.floor(Math.log(bytes) / Math.log(k))
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i]
+  }
+
+  // Handle note view
+  const handleViewNote = (noteId: number) => {
+    // Increment view count
+    fetch(`/api/notes/${noteId}/view`, { method: 'POST' })
+    // Open note in new tab
+    window.open(`/notes/view/${noteId}`, '_blank')
+  }
+
+  // Handle note like
+  const handleLikeNote = async (noteId: number) => {
+    try {
+      const response = await fetch(`/api/notes/${noteId}/like`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      
+      if (response.ok) {
+        // Update local state
+        setNotes(prevNotes => 
+          prevNotes.map(note => 
+            note.id === noteId 
+              ? { ...note, likes_count: (note.likes_count || 0) + 1 } 
+              : note
+          )
+        )
+      }
+    } catch (error) {
+      console.error('Error liking note:', error)
+    }
+  }
+
+  // Handle note upload success
+  const handleUploadSuccess = () => {
+    setIsUploadModalOpen(false)
+    fetchNotes() // Refresh the notes list
+  }
+
+  return (
+    <div className="container mx-auto py-8 px-4">
+      <div className="flex justify-between items-center mb-8">
+        <div>
+          <h1 className="text-3xl font-bold">My Notes</h1>
+          <p className="text-muted-foreground">Manage and organize your study materials</p>
+        </div>
+        <Button onClick={() => setIsUploadModalOpen(true)}>
+          <Plus className="mr-2 h-4 w-4" />
+          Upload Notes
+        </Button>
+      </div>
+
+      <Tabs defaultValue="all" className="space-y-4">
+        <div className="flex items-center justify-between">
+          <TabsList>
+            <TabsTrigger value="all">All Notes</TabsTrigger>
+            <TabsTrigger value="recent">Recent</TabsTrigger>
+            <TabsTrigger value="starred">Starred</TabsTrigger>
+          </TabsList>
+          
+          <div className="relative w-64">
+            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+            <Input
+              type="search"
+              placeholder="Search notes..."
+              className="pl-8"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
+        </div>
+
+        <div className="grid gap-6 md:grid-cols-4">
+          {/* Sidebar with subjects */}
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold mb-2">Subjects</h3>
+            <div className="space-y-2">
+              <button
+                onClick={() => setSelectedSubject(null)}
+                className={`w-full text-left px-4 py-2 rounded-md ${
+                  !selectedSubject 
+                    ? 'bg-primary text-primary-foreground' 
+                    : 'hover:bg-accent hover:text-accent-foreground'
+                }`}
+              >
+                All Subjects ({notes.length})
+              </button>
+              {subjectCounts.map(({ subject, count }) => (
+                <button
+                  key={subject}
+                  onClick={() => setSelectedSubject(subject)}
+                  className={`w-full text-left px-4 py-2 rounded-md flex justify-between items-center ${
+                    selectedSubject === subject
+                      ? 'bg-primary text-primary-foreground'
+                      : 'hover:bg-accent hover:text-accent-foreground'
+                  }`}
+                >
+                  <span>{subject}</span>
+                  <span className="text-xs bg-background text-foreground rounded-full px-2 py-1">
+                    {count}
+                  </span>
+                </button>
+              ))}
+            </div>
+          </div>
+          
+          {/* Main content */}
+          <div className="md:col-span-3">
+            <TabsContent value="all" className="space-y-4">
+              {isLoading ? (
+                <div className="flex items-center justify-center h-64">
+                  <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+                </div>
+              ) : filteredNotes.length > 0 ? (
+                <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+                  {filteredNotes.map((note) => (
+                    <Card key={note.id} className="h-full flex flex-col overflow-hidden hover:shadow-md transition-shadow">
+                      <div className="p-4 flex-1 flex flex-col">
+                        <div className="flex justify-between items-start mb-2">
+                          <h3 className="font-semibold text-lg line-clamp-2">{note.title}</h3>
+                          {note.subject && (
+                            <Badge variant="outline" className="ml-2 whitespace-nowrap">
+                              {note.subject}
+                            </Badge>
+                          )}
+                        </div>
+                        
+                        {note.description && (
+                          <p className="text-sm text-muted-foreground mb-4 line-clamp-3">
+                            {note.description}
+                          </p>
+                        )}
+                        
+                        <div className="mt-auto pt-2 border-t">
+                          <div className="flex items-center justify-between text-xs text-muted-foreground mb-2">
+                            <div className="flex items-center">
+                              <Clock className="h-3 w-3 mr-1" />
+                              {formatDistanceToNow(new Date(note.created_at), { addSuffix: true })}
+                            </div>
+                            <span>{formatFileSize(note.file_size_bytes)}</span>
+                          </div>
+                          
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center space-x-2">
+                              <Button 
+                                variant="ghost" 
+                                size="sm" 
+                                className="h-8 px-2 text-xs"
+                                onClick={() => handleLikeNote(note.id)}
+                              >
+                                <ThumbsUp className="h-3 w-3 mr-1" />
+                                {note.likes_count || 0}
+                              </Button>
+                              <Button 
+                                variant="ghost" 
+                                size="sm" 
+                                className="h-8 px-2 text-xs"
+                              >
+                                <MessageCircle className="h-3 w-3 mr-1" />
+                                {note.comments_count || 0}
+                              </Button>
+                            </div>
+                            
+                            <div className="flex items-center space-x-1 text-xs text-muted-foreground">
+                              <Eye className="h-3 w-3" />
+                              <span>{note.views_count || 0} views</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div className="bg-muted/50 p-2 border-t">
+                        <Button 
+                          variant="outline" 
+                          size="sm" 
+                          className="w-full"
+                          onClick={() => handleViewNote(note.id)}
+                        >
+                          View Note
+                        </Button>
+                      </div>
+                    </Card>
+                  ))}
+                </div>
+              ) : (
+                <div className="flex flex-col items-center justify-center py-12 text-center">
+                  <FileText className="mx-auto h-12 w-12 text-muted-foreground mb-4" />
+                  <h3 className="text-lg font-medium mb-1">No notes found</h3>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    {searchQuery || selectedSubject 
+                      ? 'Try adjusting your search or filter'
+                      : 'Get started by uploading your first note'}
+                  </p>
+                  <Button onClick={() => setIsUploadModalOpen(true)}>
+                    <Plus className="mr-2 h-4 w-4" />
+                    Upload Notes
+                  </Button>
+                </div>
+              )}
+            </TabsContent>
+            
+            <TabsContent value="recent" className="space-y-4">
+              <div className="text-center py-12">
+                <p className="text-muted-foreground">Recent notes will appear here</p>
+              </div>
+            </TabsContent>
+            
+            <TabsContent value="starred" className="space-y-4">
+              <div className="text-center py-12">
+                <Star className="mx-auto h-12 w-12 text-muted-foreground mb-4" />
+                <h3 className="text-lg font-medium mb-1">No starred notes</h3>
+                <p className="text-sm text-muted-foreground">
+                  Star notes to easily find them later
+                </p>
+              </div>
+            </TabsContent>
+          </div>
+        </div>
+      </Tabs>
+
+      {/* Upload Modal */}
+      <UploadModal 
+        isOpen={isUploadModalOpen} 
+        onClose={() => setIsUploadModalOpen(false)}
+        onUploadComplete={handleUploadSuccess}
+      />
+    </div>
+  )
+}

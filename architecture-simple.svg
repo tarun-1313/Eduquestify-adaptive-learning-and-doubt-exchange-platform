@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="800" height="600" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
+  <rect width="800" height="600" fill="#ffffff"/>
+  <text x="400" y="30" text-anchor="middle" font-family="Arial" font-size="24" font-weight="bold" fill="#1e293b">
+    EduQuestify Architecture
+  </text>
+  <rect x="50" y="60" width="700" height="80" rx="8" fill="#e0f2fe" stroke="#0369a1" stroke-width="2"/>
+  <text x="400" y="85" text-anchor="middle" font-family="Arial" font-size="16" font-weight="bold" fill="#0369a1">
+    CLIENT LAYER - Next.js 14, React 18, TypeScript
+  </text>
+  <text x="400" y="105" text-anchor="middle" font-family="Arial" font-size="12" fill="#0369a1">
+    Web Browser • Mobile Web • PWA • Tailwind CSS • Framer Motion
+  </text>
+  <text x="400" y="125" text-anchor="middle" font-family="Arial" font-size="12" fill="#0369a1">
+    Responsive Design • State Management • Real-time Updates
+  </text>
+  <rect x="50" y="160" width="700" height="120" rx="8" fill="#f0fdf4" stroke="#16a34a" stroke-width="2"/>
+  <text x="400" y="185" text-anchor="middle" font-family="Arial" font-size="16" font-weight="bold" fill="#16a34a">
+    APPLICATION LAYER
+  </text>
+  <text x="150" y="210" font-family="Arial" font-size="12" fill="#15803d">
+    • API Gateway (JWT Auth, RBAC, Rate Limiting)
+  </text>
+  <text x="150" y="230" font-family="Arial" font-size="12" fill="#15803d">
+    • Business Logic (Auth, Content, Gamification, Real-time)
+  </text>
+  <text x="150" y="250" font-family="Arial" font-size="12" fill="#15803d">
+    • Data Access Layer (Connection Pooling, Query Optimization)
+  </text>
+  <text x="450" y="210" font-family="Arial" font-size="12" fill="#15803d">
+    • Socket.io (Real-time Chat, Notifications)
+  </text>
+  <text x="450" y="230" font-family="Arial" font-size="12" fill="#15803d">
+    • AI Integration (Gemini API, Content Generation)
+  </text>
+  <text x="450" y="250" font-family="Arial" font-size="12" fill="#15803d">
+    • Gamification Engine (XP, Coins, Achievements)
+  </text>
+  <rect x="50" y="300" width="700" height="120" rx="8" fill="#fef3c7" stroke="#d97706" stroke-width="2"/>
+  <text x="400" y="325" text-anchor="middle" font-family="Arial" font-size="16" font-weight="bold" fill="#d97706">
+    DATA LAYER
+  </text>
+  <text x="150" y="350" font-family="Arial" font-size="12" fill="#92400e">
+    • MySQL Database (Users, Content, Analytics, Gamification)
+  </text>
+  <text x="150" y="370" font-family="Arial" font-size="12" fill="#92400e">
+    • File Storage (Documents, Images, Media, CDN)
+  </text>
+  <text x="150" y="390" font-family="Arial" font-size="12" fill="#92400e">
+    • External Services (Google Gemini AI, Auth Providers, Email)
+  </text>
+  <text x="150" y="410" font-family="Arial" font-size="12" fill="#92400e">
+    • Analytics & Monitoring (User Behavior, Performance)
+  </text>
+  <rect x="50" y="440" width="700" height="120" rx="8" fill="#f3e8ff" stroke="#7c3aed" stroke-width="2"/>
+  <text x="400" y="465" text-anchor="middle" font-family="Arial" font-size="16" font-weight="bold" fill="#7c3aed">
+    KEY FEATURES
+  </text>
+  <text x="150" y="490" font-family="Arial" font-size="12" fill="#6b21a8">
+    • Real-time Collaboration (Chat, File Sharing, Study Groups)
+  </text>
+  <text x="150" y="510" font-family="Arial" font-size="12" fill="#6b21a8">
+    • AI-Powered Content (Question Generation, Summarization)
+  </text>
+  <text x="150" y="530" font-family="Arial" font-size="12" fill="#6b21a8">
+    • Advanced Gamification (XP, Levels, Badges, Streaks)
+  </text>
+  <text x="450" y="490" font-family="Arial" font-size="12" fill="#6b21a8">
+    • Multimedia Processing (PDF, Word, Image Analysis)
+  </text>
+  <text x="450" y="510" font-family="Arial" font-size="12" fill="#6b21a8">
+    • Comprehensive Analytics (Progress Tracking, Insights)
+  </text>
+  <text x="450" y="530" font-family="Arial" font-size="12" fill="#6b21a8">
+    • Mobile-First Design (Responsive, PWA Support)
+  </text>
+</svg>
