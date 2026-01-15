@@ -3,7 +3,7 @@ import { generateQuestions, generateFlashcards, analyzePerformance } from '@/lib
 
 // TODO: Paste your API key here.
 // WARNING: This is INSECURE. Do not commit this file to Git or share it publicly.
-const GEMINI_API_KEY = "AIzaSyD7watLiaNdCUuzIX_UOIVdDCnCLip9eIo"
+const GEMINI_API_KEY = "GEMINI API KEY"
 
 export async function POST(request: NextRequest) {
   try {
