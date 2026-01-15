@@ -12,7 +12,7 @@ export interface QuizQuestion {
 }
 
 function getGeminiModel() {
-  const apiKey = "AIzaSyD7watLiaNdCUuzIX_UOIVdDCnCLip9eIo"
+  const apiKey = "YOUR GEMINI API KEY"
   if (!apiKey) {
     throw new Error('GEMINI_API_KEY is not set in environment variables')
   }
